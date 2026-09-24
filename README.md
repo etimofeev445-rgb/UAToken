@@ -1,2 +1,1 @@
-# UAToken
-UAToken
+index.html
