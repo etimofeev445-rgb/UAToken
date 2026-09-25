@@ -1,72 +1,211 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UAT Cards</title>
-
-<style>
-    * {
-        box-sizing: border-box;
-    }
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAT Wallet</title>
+  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-        margin: 0;
-        min-height: 100vh;
-        background: #111111;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 20px;
+      min-height: 100vh;
+      background: #0b0b0f;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
-
-    .container {
-        width: 100%;
-        max-width: 500px;
+    .wallet {
+      width: 100%;
+      max-width: 420px;
+      background: #16161d;
+      border-radius: 28px;
+      padding: 28px 22px;
+      border: 1px solid #2a2a35;
     }
-
-    .card {
-        display: block;
-        text-decoration: none;
-        background: #1f1f1f;
-        border-radius: 20px;
-        padding: 25px;
-        margin-bottom: 16px;
-        text-align: center;
-        color: white;
-        font-size: 22px;
-        font-weight: bold;
-        border: 1px solid #333;
+    .header { text-align: center; margin-bottom: 20px; }
+    .header h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .header p { color: #8b8b9e; font-size: 13px; }
+    .network-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .tab {
+      flex: 1; padding: 11px; border-radius: 14px;
+      border: 1px solid #2a2a35; background: #0f0f14;
+      color: #8b8b9e; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-align: center;
     }
-
-    .card:active {
-        transform: scale(0.98);
+    .tab.active { background: #2a2a35; color: #fff; border-color: #00e676; }
+    #ton-connect { display: flex; justify-content: center; margin-bottom: 14px; }
+    .tron-btn {
+      width: 100%; padding: 13px; border-radius: 16px; border: none;
+      background: #ef0027; color: white; font-size: 15px; font-weight: 600;
+      cursor: pointer; margin-bottom: 14px; display: none;
     }
-</style>
+    .info-box {
+      background: #0f0f14; border-radius: 16px; padding: 14px;
+      margin-bottom: 14px; display: none;
+    }
+    .label { font-size: 12px; color: #8b8b9e; margin-bottom: 4px; }
+    .value { font-size: 14px; word-break: break-all; color: #00e676; }
+    .balance { font-size: 20px; font-weight: 700; color: #fff; margin-top: 4px; }
+    .history {
+      background: #0f0f14; border-radius: 16px; padding: 14px;
+      margin-bottom: 16px; display: none; max-height: 160px; overflow-y: auto;
+    }
+    .history-title { font-size: 13px; color: #8b8b9e; margin-bottom: 10px; }
+    .tx {
+      font-size: 12px; padding: 8px 0;
+      border-bottom: 1px solid #1f1f28;
+      display: flex; justify-content: space-between;
+    }
+    .tx:last-child { border-bottom: none; }
+    .tx-amount { color: #00e676; }
+    .buttons { display: flex; flex-direction: column; gap: 10px; }
+    .btn {
+      display: block; width: 100%; padding: 15px; border-radius: 16px;
+      border: none; font-size: 15px; font-weight: 600;
+      text-align: center; text-decoration: none; cursor: pointer;
+    }
+    .btn-card { background: linear-gradient(135deg, #fdcb6e, #e17055); color: #2d3436; }
+    .btn-swap { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
+    .btn-buy { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
+    .footer { margin-top: 16px; text-align: center; font-size: 12px; color: #5a5a6e; }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
+  <div class="wallet">
+    <div class="header">
+      <h1>UAT Wallet</h1>
+      <p>Мультисетевой кошелёк</p>
+    </div>
 
-    <a class="card" href="#">
-        💳 KRAK
-    </a>
+    <div class="network-tabs">
+      <div class="tab active" id="tab-ton" onclick="switchNetwork('ton')">TON</div>
+      <div class="tab" id="tab-tron" onclick="switchNetwork('tron')">Tron</div>
+    </div>
 
-    <a class="card" href="#">
-        💳 SIMPLE
-    </a>
+    <div id="ton-section">
+      <div id="ton-connect"></div>
+    </div>
 
-    <a class="card" href="#">
-        💳 KOLO
-    </a>
+    <button class="tron-btn" id="tron-btn" onclick="connectTron()">Подключить Tron</button>
 
-    <a class="card" href="#">
-        💳 BITGET
-    </a>
+    <div class="info-box" id="info-box">
+      <div class="label">Адрес</div>
+      <div class="value" id="address"></div>
+      <div class="label" style="margin-top:12px">Баланс</div>
+      <div class="balance" id="balance">—</div>
+    </div>
 
-</div>
+    <div class="history" id="history">
+      <div class="history-title">История платежей</div>
+      <div id="tx-list">Загрузка...</div>
+    </div>
+
+    <div class="buttons">
+      <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Открыть карту</a>
+      <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмен</a>
+      <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в разработке')">💰 Купить UAT</a>
+    </div>
+
+    <div class="footer">TON + Tron</div>
+  </div>
+
+  <script>
+    let currentAddress = null;
+
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
+      buttonRootId: 'ton-connect'
+    });
+
+    tonConnectUI.onStatusChange(async (wallet) => {
+      if (wallet) {
+        currentAddress = wallet.account.address;
+        showInfo(currentAddress);
+        await loadTonData(currentAddress);
+      } else {
+        hideInfo();
+      }
+    });
+
+    async function loadTonData(address) {
+      try {
+        const balRes = await fetch(`https://tonapi.io/v2/accounts/${address}`);
+        const balData = await balRes.json();
+        const tonBalance = (balData.balance / 1e9).toFixed(4);
+        document.getElementById('balance').textContent = tonBalance + ' TON';
+
+        const txRes = await fetch(`https://tonapi.io/v2/accounts/${address}/events?limit=8`);
+        const txData = await txRes.json();
+        renderHistory(txData.events || []);
+      } catch (e) {
+        document.getElementById('balance').textContent = 'Ошибка загрузки';
+        document.getElementById('tx-list').textContent = 'Не удалось загрузить историю';
+      }
+    }
+
+    async function connectTron() {
+      if (!window.tronLink) {
+        alert('Установите TronLink');
+        window.open('https://www.tronlink.org/', '_blank');
+        return;
+      }
+      try {
+        await window.tronLink.request({ method: 'tron_requestAccounts' });
+        currentAddress = window.tronWeb.defaultAddress.base58;
+        showInfo(currentAddress);
+        document.getElementById('balance').textContent = 'TRX (через TronLink)';
+        document.getElementById('tx-list').innerHTML = '<div class="tx">История доступна в TronLink</div>';
+      } catch (e) {
+        alert('Не удалось подключить Tron');
+      }
+    }
+
+    function renderHistory(events) {
+      const list = document.getElementById('tx-list');
+      if (!events.length) {
+        list.innerHTML = '<div class="tx">Нет транзакций</div>';
+        return;
+      }
+      list.innerHTML = events.map(ev => {
+        const amount = ev.actions && ev.actions[0] && ev.actions[0].TonTransfer 
+          ? (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON' : '—';
+        return `<div class="tx">
+          <span>${new Date(ev.timestamp * 1000).toLocaleDateString()}</span>
+          <span class="tx-amount">${amount}</span>
+        </div>`;
+      }).join('');
+    }
+
+    function showInfo(addr) {
+      document.getElementById('address').textContent = addr;
+      document.getElementById('info-box').style.display = 'block';
+      document.getElementById('history').style.display = 'block';
+    }
+
+    function hideInfo() {
+      document.getElementById('info-box').style.display = 'none';
+      document.getElementById('history').style.display = 'none';
+    }
+
+    function switchNetwork(net) {
+      document.getElementById('tab-ton').classList.remove('active');
+      document.getElementById('tab-tron').classList.remove('active');
+      document.getElementById('tab-' + net).classList.add('active');
+
+      if (net === 'ton') {
+        document.getElementById('ton-section').style.display = 'block';
+        document.getElementById('tron-btn').style.display = 'none';
+      } else {
+        document.getElementById('ton-section').style.display = 'none';
+        document.getElementById('tron-btn').style.display = 'block';
+      }
+      hideInfo();
+    }
+  </script>
 
 </body>
 </html>
