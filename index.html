@@ -22,14 +22,15 @@
     }
 
     button,
-    input,
-    select {
-      font-family: inherit;
+    a,
+    select,
+    input {
+      -webkit-tap-highlight-color: transparent;
     }
 
     button,
     a {
-      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .header {
@@ -67,14 +68,7 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
-      transition: 0.2s ease;
-    }
-
-    .nav-btn:active,
-    .tab:active,
-    .country-btn:active,
-    .back-btn:active {
-      transform: scale(0.98);
+      user-select: none;
     }
 
     .nav-btn.active {
@@ -111,7 +105,7 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
-      transition: 0.2s ease;
+      user-select: none;
     }
 
     .tab.active {
@@ -121,6 +115,7 @@
     }
 
     .ai-btn {
+      display: block;
       width: 100%;
       padding: 16px;
       border-radius: 16px;
@@ -131,11 +126,8 @@
       font-weight: 700;
       cursor: pointer;
       margin-bottom: 16px;
-      transition: 0.2s ease;
-    }
-
-    .ai-btn:active {
-      transform: scale(0.99);
+      text-align: center;
+      text-decoration: none;
     }
 
     .buttons {
@@ -157,11 +149,6 @@
       cursor: pointer;
       color: inherit;
       font-family: inherit;
-      transition: 0.2s ease;
-    }
-
-    .btn:active {
-      transform: scale(0.99);
     }
 
     .btn-card {
@@ -200,17 +187,16 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
       margin-bottom: 12px;
       font-size: 13px;
       color: #8b8b9e;
+      gap: 10px;
     }
 
     .rate-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 12px;
       padding: 10px 0;
       border-bottom: 1px solid #1f1f28;
       font-size: 15px;
@@ -258,8 +244,8 @@
 
     .conv-row input,
     .conv-row select {
-      min-width: 0;
       flex: 1;
+      min-width: 0;
       padding: 12px;
       border-radius: 12px;
       border: 1px solid #2a2a35;
@@ -283,7 +269,17 @@
       font-weight: 600;
       color: #00e676;
       text-align: center;
-      word-break: break-word;
+      min-height: 44px;
+    }
+
+    .error-box {
+      background: #2a1518;
+      border: 1px solid #74333b;
+      color: #ff9da7;
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.4;
     }
 
     #cards-panel {
@@ -369,12 +365,15 @@
       font-size: 15px;
       font-weight: 600;
       color: #fff;
-      transition: 0.2s ease;
+      user-select: none;
     }
 
-    .country-btn:hover {
-      border-color: #3a3a48;
-      background: #1a1a22;
+    .country-btn:active,
+    .nav-btn:active,
+    .tab:active,
+    .back-btn:active,
+    .btn:active {
+      transform: scale(0.98);
     }
 
     .country-btn .flag {
@@ -403,7 +402,6 @@
       font-size: 14px;
       margin-bottom: 18px;
       cursor: pointer;
-      transition: 0.2s ease;
     }
 
     .job-btn {
@@ -416,12 +414,6 @@
       text-decoration: none;
       font-size: 14px;
       margin-bottom: 8px;
-      transition: 0.2s ease;
-    }
-
-    .job-btn:hover {
-      background: #181820;
-      border-color: #3a3a48;
     }
 
     .job-btn span {
@@ -431,23 +423,7 @@
       margin-top: 2px;
     }
 
-    .loading {
-      color: #8b8b9e;
-      text-align: center;
-      padding: 10px 0;
-    }
-
-    .error {
-      color: #ff7675;
-      text-align: center;
-      padding: 10px 0;
-    }
-
     @media (max-width: 360px) {
-      .nav-btn {
-        font-size: 13px;
-      }
-
       .countries-grid {
         gap: 8px;
       }
@@ -486,10 +462,15 @@
     </button>
   </div>
 
-  <!-- UAT MARKET -->
+
+  <!-- =========================
+       UAT MARKET
+       ========================= -->
+
   <div class="page active" id="page-wallet">
 
     <div class="network-tabs">
+
       <button
         type="button"
         class="tab active"
@@ -507,18 +488,24 @@
       >
         Курс
       </button>
+
     </div>
 
-    <!-- AI / MARKET -->
+
+    <!-- AI / MAIN -->
+
     <div id="ton-section">
 
-      <button
-        type="button"
+      <!-- Обычная ссылка вместо window.open -->
+      <a
         class="ai-btn"
-        onclick="openAI()"
+        href="https://grok.com"
+        target="_blank"
+        rel="noopener noreferrer"
       >
         ✨ AI
-      </button>
+      </a>
+
 
       <div class="buttons" id="main-buttons">
 
@@ -530,6 +517,7 @@
           💳 Відкрити карту
         </button>
 
+
         <a
           class="btn btn-swap"
           href="https://app.ston.fi/"
@@ -539,13 +527,26 @@
           🔄 Обмін
         </a>
 
-        <button
-          type="button"
+
+        <a
           class="btn btn-buy"
-          onclick="showBuyMessage()"
+          href="https://t.me/UATMARKET_bot"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           💰 Купити UAT
-        </button>
+        </a>
+
+
+        <a
+          class="btn btn-ads"
+          href="https://t.me/UATMARKET_bot"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          📰 UAT Market
+        </a>
+
 
         <a
           class="btn btn-ads"
@@ -558,7 +559,9 @@
 
       </div>
 
+
       <!-- CARDS -->
+
       <div id="cards-panel">
 
         <button
@@ -569,7 +572,9 @@
           ← Назад
         </button>
 
+
         <div class="card-item">
+
           <div class="card-preview card-simple">
             <div class="card-brand">Simple</div>
             <div class="card-type">Debit</div>
@@ -584,9 +589,12 @@
           >
             Відкрити карту Simple
           </a>
+
         </div>
 
+
         <div class="card-item">
+
           <div class="card-preview card-kolo">
             <div class="card-brand">kolo</div>
             <div class="card-type">VISA</div>
@@ -601,9 +609,12 @@
           >
             Відкрити карту Kolo
           </a>
+
         </div>
 
+
         <div class="card-item">
+
           <div class="card-preview card-krak">
             <div class="card-brand">krak</div>
             <div class="card-type">world elite debit</div>
@@ -618,28 +629,32 @@
           >
             Відкрити карту Krak
           </a>
+
         </div>
 
       </div>
+
     </div>
 
+
     <!-- RATES -->
+
     <div id="rates-section">
 
       <div class="rates-box">
 
         <div class="rates-header">
           <span>Курс НБУ</span>
-          <span id="rates-updated">оновлення...</span>
+          <span id="rates-updated">—</span>
         </div>
 
         <div id="rates-list">
-          <div class="loading">Завантаження курсів...</div>
+          Натисніть «Курс», щоб завантажити курси.
         </div>
 
       </div>
 
-      <!-- CONVERTER -->
+
       <div class="converter">
 
         <h3>Конвертер</h3>
@@ -652,7 +667,6 @@
             value="100"
             min="0"
             step="any"
-            inputmode="decimal"
             oninput="convert()"
           >
 
@@ -671,12 +685,12 @@
 
         </div>
 
+
         <div class="conv-row">
 
           <select
             id="conv-to"
             onchange="convert()"
-            style="flex:1"
           >
             <option value="USD">USD</option>
             <option value="UAH">UAH</option>
@@ -689,11 +703,12 @@
 
         </div>
 
+
         <div
           class="conv-result"
           id="conv-result"
         >
-          Завантаження курсу...
+          —
         </div>
 
       </div>
@@ -702,7 +717,11 @@
 
   </div>
 
-  <!-- TELEGRAM -->
+
+  <!-- =========================
+       TELEGRAM
+       ========================= -->
+
   <div class="page" id="page-jobs">
 
     <div id="countries-list">
@@ -718,6 +737,7 @@
           Польща
         </button>
 
+
         <button
           type="button"
           class="country-btn"
@@ -726,6 +746,7 @@
           <span class="flag">🇩🇪</span>
           Німеччина
         </button>
+
 
         <button
           type="button"
@@ -736,6 +757,7 @@
           Чехія
         </button>
 
+
         <button
           type="button"
           class="country-btn"
@@ -744,6 +766,7 @@
           <span class="flag">🇸🇰</span>
           Словаччина
         </button>
+
 
         <button
           type="button"
@@ -754,6 +777,7 @@
           Італія
         </button>
 
+
         <button
           type="button"
           class="country-btn"
@@ -763,6 +787,7 @@
           Угорщина
         </button>
 
+
         <button
           type="button"
           class="country-btn"
@@ -771,6 +796,7 @@
           <span class="flag">🇧🇬</span>
           Болгарія
         </button>
+
 
         <button
           type="button"
@@ -785,7 +811,9 @@
 
     </div>
 
+
     <!-- POLAND -->
+
     <div class="country-detail" id="country-poland">
 
       <button
@@ -832,7 +860,9 @@
 
     </div>
 
+
     <!-- GERMANY -->
+
     <div class="country-detail" id="country-germany">
 
       <button
@@ -879,7 +909,9 @@
 
     </div>
 
+
     <!-- CZECH -->
+
     <div class="country-detail" id="country-czech">
 
       <button
@@ -926,7 +958,9 @@
 
     </div>
 
+
     <!-- SLOVAKIA -->
+
     <div class="country-detail" id="country-slovakia">
 
       <button
@@ -973,7 +1007,9 @@
 
     </div>
 
+
     <!-- ITALY -->
+
     <div class="country-detail" id="country-italy">
 
       <button
