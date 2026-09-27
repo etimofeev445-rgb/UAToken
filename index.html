@@ -75,8 +75,6 @@
     .btn-buy { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
-    /* card menu styles removed — only one card left */
-
     #rates-section { display: none; }
     .rates-box {
       background: #121218; border: 1px solid #2a2a35;
@@ -168,7 +166,7 @@
         <div id="tx-list">Завантаження...</div>
       </div>
       <div class="buttons">
-        <a class="btn btn-card" href="https://krak.app/@Goldstar" target="_blank">💳 Відкрити карту</a>
+        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Відкрити карту</a>
         <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
         <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
         <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
@@ -373,43 +371,30 @@
       document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
     }
 
-    var tonConnectUI = null;
-    try {
-      if (typeof TON_CONNECT_UI !== 'undefined') {
-        tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-          manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
-          buttonRootId: 'ton-connect'
-        });
+    var tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
+      buttonRootId: 'ton-connect'
+    });
 
-        tonConnectUI.onStatusChange(async function(wallet) {
-          if (wallet) {
-            showInfo(wallet.account.address);
-            await loadTonData(wallet.account.address);
-          } else {
-            hideInfo();
-          }
-        });
+    tonConnectUI.onStatusChange(async function(wallet) {
+      if (wallet) {
+        showInfo(wallet.account.address);
+        await loadTonData(wallet.account.address);
       } else {
-        console.warn('TON Connect UI library not loaded');
+        hideInfo();
       }
-    } catch (e) {
-      console.error('TON Connect init error:', e);
-    }
+    });
 
     async function loadTonData(address) {
       try {
         var balRes = await fetch('https://tonapi.io/v2/accounts/' + address);
         var balData = await balRes.json();
         document.getElementById('balance').textContent = (balData.balance / 1e9).toFixed(4) + ' TON';
-      } catch (e) {
-        document.getElementById('balance').textContent = 'Помилка';
-      }
-      try {
         var txRes = await fetch('https://tonapi.io/v2/accounts/' + address + '/events?limit=6');
         var txData = await txRes.json();
         renderHistory(txData.events || []);
       } catch (e) {
-        document.getElementById('tx-list').innerHTML = '<div class="tx">Помилка завантаження</div>';
+        document.getElementById('balance').textContent = 'Помилка';
       }
     }
 
@@ -429,4 +414,18 @@
         html += '<div class="tx"><span>' + new Date(ev.timestamp * 1000).toLocaleDateString() + '</span>';
         html += '<span class="tx-amount">' + amount + '</span></div>';
       }
-      l
+      list.innerHTML = html;
+    }
+
+    function showInfo(addr) {
+      document.getElementById('address').textContent = addr;
+      document.getElementById('info-box').style.display = 'block';
+      document.getElementById('history').style.display = 'block';
+    }
+
+    function hideInfo() {
+      document.getElementById('info-box').style.display = 'none';
+      document.getElementById('history').style.display = 'none';
+    }
+  </script>
+</body>
