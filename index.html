@@ -3,148 +3,462 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b0f">
   <title>UAT App</title>
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       min-height: 100vh;
       background: #0b0b0f;
       color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       padding-bottom: 40px;
     }
-    .header { text-align: center; padding: 24px 20px 12px; }
-    .header h1 { font-size: 24px; font-weight: 700; }
-    .header p { color: #8b8b9e; font-size: 13px; margin-top: 4px; }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .header {
+      text-align: center;
+      padding: 24px 20px 12px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .header p {
+      color: #8b8b9e;
+      font-size: 13px;
+      margin-top: 4px;
+    }
 
     .nav {
-      display: flex; gap: 8px; padding: 0 16px 18px;
-      max-width: 480px; margin: 0 auto;
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 18px;
+      max-width: 480px;
+      margin: 0 auto;
     }
+
     .nav-btn {
-      flex: 1; padding: 12px; border-radius: 14px;
-      border: 1px solid #2a2a35; background: #121218;
-      color: #8b8b9e; font-size: 14px; font-weight: 600;
-      cursor: pointer; text-align: center;
+      flex: 1;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #2a2a35;
+      background: #121218;
+      color: #8b8b9e;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s ease;
     }
+
+    .nav-btn:active,
+    .tab:active,
+    .country-btn:active,
+    .back-btn:active {
+      transform: scale(0.98);
+    }
+
     .nav-btn.active {
-      background: #1f1f2a; color: #fff; border-color: #00e676;
+      background: #1f1f2a;
+      color: #fff;
+      border-color: #00e676;
     }
 
-    .page { display: none; max-width: 480px; margin: 0 auto; padding: 0 16px; }
-    .page.active { display: block; }
+    .page {
+      display: none;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
 
-    .network-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+    .page.active {
+      display: block;
+    }
+
+    .network-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
     .tab {
-      flex: 1; padding: 11px; border-radius: 14px;
-      border: 1px solid #2a2a35; background: #0f0f14;
-      color: #8b8b9e; font-size: 14px; font-weight: 600;
-      cursor: pointer; text-align: center;
+      flex: 1;
+      padding: 11px;
+      border-radius: 14px;
+      border: 1px solid #2a2a35;
+      background: #0f0f14;
+      color: #8b8b9e;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: 0.2s ease;
     }
-    .tab.active { background: #2a2a35; color: #fff; border-color: #00e676; }
+
+    .tab.active {
+      background: #2a2a35;
+      color: #fff;
+      border-color: #00e676;
+    }
 
     .ai-btn {
-      width: 100%; padding: 16px; border-radius: 16px; border: none;
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      border: none;
       background: linear-gradient(135deg, #a855f7, #6366f1);
-      color: #fff; font-size: 16px; font-weight: 700;
-      cursor: pointer; margin-bottom: 16px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-bottom: 16px;
+      transition: 0.2s ease;
     }
 
-    .buttons { display: flex; flex-direction: column; gap: 10px; }
+    .ai-btn:active {
+      transform: scale(0.99);
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
     .btn {
-      display: block; width: 100%; padding: 15px; border-radius: 16px;
-      border: none; font-size: 15px; font-weight: 600;
-      text-align: center; text-decoration: none; cursor: pointer;
-      color: inherit; font-family: inherit;
+      display: block;
+      width: 100%;
+      padding: 15px;
+      border-radius: 16px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      color: inherit;
+      font-family: inherit;
+      transition: 0.2s ease;
     }
-    .btn-card { background: linear-gradient(135deg, #fdcb6e, #e17055); color: #2d3436; }
-    .btn-swap { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
-    .btn-buy { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
-    .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
-    #rates-section { display: none; }
+    .btn:active {
+      transform: scale(0.99);
+    }
+
+    .btn-card {
+      background: linear-gradient(135deg, #fdcb6e, #e17055);
+      color: #2d3436;
+    }
+
+    .btn-swap {
+      background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+      color: #fff;
+    }
+
+    .btn-buy {
+      background: linear-gradient(135deg, #00b894, #55efc4);
+      color: #003d2e;
+    }
+
+    .btn-ads {
+      background: linear-gradient(135deg, #0088cc, #00aaff);
+      color: #fff;
+    }
+
+    #rates-section {
+      display: none;
+    }
+
     .rates-box {
-      background: #121218; border: 1px solid #2a2a35;
-      border-radius: 16px; padding: 16px; margin-bottom: 14px;
+      background: #121218;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
     }
+
     .rates-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 12px; font-size: 13px; color: #8b8b9e;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: #8b8b9e;
     }
+
     .rate-row {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid #1f1f28; font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid #1f1f28;
+      font-size: 15px;
     }
-    .rate-row:last-child { border-bottom: none; }
-    .rate-code { font-weight: 700; }
-    .rate-name { font-size: 12px; color: #8b8b9e; }
-    .rate-value { color: #00e676; font-weight: 600; }
+
+    .rate-row:last-child {
+      border-bottom: none;
+    }
+
+    .rate-code {
+      font-weight: 700;
+    }
+
+    .rate-name {
+      font-size: 12px;
+      color: #8b8b9e;
+      margin-top: 2px;
+    }
+
+    .rate-value {
+      color: #00e676;
+      font-weight: 600;
+      white-space: nowrap;
+    }
 
     .converter {
-      background: #121218; border: 1px solid #2a2a35;
-      border-radius: 16px; padding: 16px; margin-bottom: 16px;
-    }
-    .converter h3 { font-size: 15px; margin-bottom: 12px; font-weight: 600; }
-    .conv-row { display: flex; gap: 8px; margin-bottom: 10px; }
-    .conv-row input, .conv-row select {
-      flex: 1; padding: 12px; border-radius: 12px;
-      border: 1px solid #2a2a35; background: #0f0f14;
-      color: #fff; font-size: 15px; outline: none;
-    }
-    .conv-result {
-      margin-top: 8px; padding: 12px; border-radius: 12px;
-      background: #0f0f14; font-size: 16px; font-weight: 600;
-      color: #00e676; text-align: center;
+      background: #121218;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
-    #cards-panel { display: none; }
-    .card-item { margin-bottom: 18px; }
+    .converter h3 {
+      font-size: 15px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .conv-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .conv-row input,
+    .conv-row select {
+      min-width: 0;
+      flex: 1;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #2a2a35;
+      background: #0f0f14;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .conv-row input:focus,
+    .conv-row select:focus {
+      border-color: #00e676;
+    }
+
+    .conv-result {
+      margin-top: 8px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #0f0f14;
+      font-size: 16px;
+      font-weight: 600;
+      color: #00e676;
+      text-align: center;
+      word-break: break-word;
+    }
+
+    #cards-panel {
+      display: none;
+    }
+
+    .card-item {
+      margin-bottom: 18px;
+    }
+
     .card-preview {
-      border-radius: 16px; height: 170px; padding: 18px;
-      margin-bottom: 10px; position: relative; overflow: hidden;
+      border-radius: 16px;
+      height: 170px;
+      padding: 18px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
       border: 1px solid #2a2a35;
     }
-    .card-simple { background: linear-gradient(160deg, #1a1a1a, #000); color: #fff; }
-    .card-kolo { background: linear-gradient(160deg, #3a3a42, #2a2a30); color: #ddd; }
-    .card-krak { background: linear-gradient(160deg, #2a2a2e, #111); color: #fff; }
-    .card-brand { font-size: 22px; font-weight: 700; }
-    .card-type {
-      position: absolute; top: 16px; right: 16px;
-      font-size: 12px; opacity: 0.8; text-align: right; max-width: 90px;
-    }
-    .card-smile {
-      position: absolute; right: 28px; top: 50%;
-      transform: translateY(-50%);
-      font-size: 52px; font-weight: 300; opacity: 0.9;
-    }
-    .card-num {
-      position: absolute; bottom: 16px; left: 18px;
-      font-size: 14px; letter-spacing: 2px; opacity: 0.85;
+
+    .card-simple {
+      background: linear-gradient(160deg, #1a1a1a, #000);
+      color: #fff;
     }
 
-    .countries-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card-kolo {
+      background: linear-gradient(160deg, #3a3a42, #2a2a30);
+      color: #ddd;
+    }
+
+    .card-krak {
+      background: linear-gradient(160deg, #2a2a2e, #111);
+      color: #fff;
+    }
+
+    .card-brand {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .card-type {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 12px;
+      opacity: 0.8;
+      text-align: right;
+      max-width: 90px;
+    }
+
+    .card-smile {
+      position: absolute;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 52px;
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    .card-num {
+      position: absolute;
+      bottom: 16px;
+      left: 18px;
+      font-size: 14px;
+      letter-spacing: 2px;
+      opacity: 0.85;
+    }
+
+    .countries-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
     .country-btn {
-      background: #16161d; border: 1px solid #2a2a35; border-radius: 18px;
-      padding: 22px 12px; text-align: center; cursor: pointer;
-      font-size: 15px; font-weight: 600; color: #fff;
+      background: #16161d;
+      border: 1px solid #2a2a35;
+      border-radius: 18px;
+      padding: 22px 12px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      transition: 0.2s ease;
     }
-    .country-btn .flag { font-size: 28px; display: block; margin-bottom: 8px; }
-    .country-detail { display: none; }
-    .country-detail.active { display: block; }
+
+    .country-btn:hover {
+      border-color: #3a3a48;
+      background: #1a1a22;
+    }
+
+    .country-btn .flag {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .country-detail {
+      display: none;
+    }
+
+    .country-detail.active {
+      display: block;
+    }
+
     .back-btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: #1a1a22; border: 1px solid #2a2a35; border-radius: 12px;
-      padding: 10px 16px; color: #fff; font-size: 14px;
-      margin-bottom: 18px; cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a1a22;
+      border: 1px solid #2a2a35;
+      border-radius: 12px;
+      padding: 10px 16px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 18px;
+      cursor: pointer;
+      transition: 0.2s ease;
     }
+
     .job-btn {
-      display: block; background: #121218; border: 1px solid #2a2a35;
-      border-radius: 14px; padding: 14px 16px; color: #fff;
-      text-decoration: none; font-size: 14px; margin-bottom: 8px;
+      display: block;
+      background: #121218;
+      border: 1px solid #2a2a35;
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: 0.2s ease;
     }
-    .job-btn span { display: block; color: #8b8b9e; font-size: 12px; margin-top: 2px; }
+
+    .job-btn:hover {
+      background: #181820;
+      border-color: #3a3a48;
+    }
+
+    .job-btn span {
+      display: block;
+      color: #8b8b9e;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .loading {
+      color: #8b8b9e;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    .error {
+      color: #ff7675;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    @media (max-width: 360px) {
+      .nav-btn {
+        font-size: 13px;
+      }
+
+      .countries-grid {
+        gap: 8px;
+      }
+
+      .country-btn {
+        padding: 18px 8px;
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <div class="header">
@@ -153,70 +467,199 @@
   </div>
 
   <div class="nav">
-    <div class="nav-btn active" id="nav-wallet" onclick="showPage('wallet')">🛒 UAT Market</div>
-    <div class="nav-btn" id="nav-jobs" onclick="showPage('jobs')">📱 Telegram</div>
+    <button
+      type="button"
+      class="nav-btn active"
+      id="nav-wallet"
+      onclick="showPage('wallet')"
+    >
+      🛒 UAT Market
+    </button>
+
+    <button
+      type="button"
+      class="nav-btn"
+      id="nav-jobs"
+      onclick="showPage('jobs')"
+    >
+      📱 Telegram
+    </button>
   </div>
 
   <!-- UAT MARKET -->
   <div class="page active" id="page-wallet">
+
     <div class="network-tabs">
-      <div class="tab active" id="tab-ton" onclick="switchTab('ton')">AI</div>
-      <div class="tab" id="tab-rates" onclick="switchTab('rates')">Курс</div>
+      <button
+        type="button"
+        class="tab active"
+        id="tab-ton"
+        onclick="switchTab('ton')"
+      >
+        AI
+      </button>
+
+      <button
+        type="button"
+        class="tab"
+        id="tab-rates"
+        onclick="switchTab('rates')"
+      >
+        Курс
+      </button>
     </div>
 
+    <!-- AI / MARKET -->
     <div id="ton-section">
-      <!-- Вместо Connect Wallet -->
-      <button type="button" class="ai-btn" onclick="openAI()">✨ AI</button>
+
+      <button
+        type="button"
+        class="ai-btn"
+        onclick="openAI()"
+      >
+        ✨ AI
+      </button>
 
       <div class="buttons" id="main-buttons">
-        <button type="button" class="btn btn-card" onclick="showCards()">💳 Відкрити карту</button>
-        <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank" rel="noopener">🔄 Обмін</a>
-        <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці'); return false;">💰 Купити UAT</a>
-        <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank" rel="noopener">📋 Оголошення</a>
+
+        <button
+          type="button"
+          class="btn btn-card"
+          onclick="showCards()"
+        >
+          💳 Відкрити карту
+        </button>
+
+        <a
+          class="btn btn-swap"
+          href="https://app.ston.fi/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🔄 Обмін
+        </a>
+
+        <button
+          type="button"
+          class="btn btn-buy"
+          onclick="showBuyMessage()"
+        >
+          💰 Купити UAT
+        </button>
+
+        <a
+          class="btn btn-ads"
+          href="https://t.me/obyavIeni"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          📋 Оголошення
+        </a>
+
       </div>
 
+      <!-- CARDS -->
       <div id="cards-panel">
-        <button type="button" class="back-btn" onclick="hideCards()">← Назад</button>
+
+        <button
+          type="button"
+          class="back-btn"
+          onclick="hideCards()"
+        >
+          ← Назад
+        </button>
+
         <div class="card-item">
           <div class="card-preview card-simple">
             <div class="card-brand">Simple</div>
             <div class="card-type">Debit</div>
             <div class="card-smile">:)</div>
           </div>
-          <a class="btn btn-card" href="https://join.simple.app/goldstar" target="_blank" rel="noopener">Відкрити карту Simple</a>
+
+          <a
+            class="btn btn-card"
+            href="https://join.simple.app/goldstar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Відкрити карту Simple
+          </a>
         </div>
+
         <div class="card-item">
           <div class="card-preview card-kolo">
             <div class="card-brand">kolo</div>
             <div class="card-type">VISA</div>
             <div class="card-num">••0318</div>
           </div>
-          <a class="btn btn-card" href="https://get.kolo.xyz/p731910" target="_blank" rel="noopener">Відкрити карту Kolo</a>
+
+          <a
+            class="btn btn-card"
+            href="https://get.kolo.xyz/p731910"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Відкрити карту Kolo
+          </a>
         </div>
+
         <div class="card-item">
           <div class="card-preview card-krak">
             <div class="card-brand">krak</div>
             <div class="card-type">world elite debit</div>
             <div class="card-num">•••• 1234</div>
           </div>
-          <a class="btn btn-card" href="https://krak.app/@Goldstar" target="_blank" rel="noopener">Відкрити карту Krak</a>
+
+          <a
+            class="btn btn-card"
+            href="https://krak.app/@Goldstar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Відкрити карту Krak
+          </a>
         </div>
+
       </div>
     </div>
 
+    <!-- RATES -->
     <div id="rates-section">
+
       <div class="rates-box">
+
         <div class="rates-header">
           <span>Курс НБУ</span>
           <span id="rates-updated">оновлення...</span>
         </div>
-        <div id="rates-list">Завантаження курсів...</div>
+
+        <div id="rates-list">
+          <div class="loading">Завантаження курсів...</div>
+        </div>
+
       </div>
+
+      <!-- CONVERTER -->
       <div class="converter">
+
         <h3>Конвертер</h3>
+
         <div class="conv-row">
-          <input type="number" id="conv-amount" value="100" min="0" step="any" oninput="convert()">
-          <select id="conv-from" onchange="convert()">
+
+          <input
+            type="number"
+            id="conv-amount"
+            value="100"
+            min="0"
+            step="any"
+            inputmode="decimal"
+            oninput="convert()"
+          >
+
+          <select
+            id="conv-from"
+            onchange="convert()"
+          >
             <option value="UAH">UAH</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -225,9 +668,16 @@
             <option value="CHF">CHF</option>
             <option value="CZK">CZK</option>
           </select>
+
         </div>
+
         <div class="conv-row">
-          <select id="conv-to" onchange="convert()" style="flex:1">
+
+          <select
+            id="conv-to"
+            onchange="convert()"
+            style="flex:1"
+          >
             <option value="USD">USD</option>
             <option value="UAH">UAH</option>
             <option value="EUR">EUR</option>
@@ -236,180 +686,323 @@
             <option value="CHF">CHF</option>
             <option value="CZK">CZK</option>
           </select>
+
         </div>
-        <div class="conv-result" id="conv-result">—</div>
+
+        <div
+          class="conv-result"
+          id="conv-result"
+        >
+          Завантаження курсу...
+        </div>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- TELEGRAM -->
   <div class="page" id="page-jobs">
+
     <div id="countries-list">
+
       <div class="countries-grid">
-        <div class="country-btn" onclick="openCountry('poland')"><span class="flag">🇵🇱</span>Польща</div>
-        <div class="country-btn" onclick="openCountry('germany')"><span class="flag">🇩🇪</span>Німеччина</div>
-        <div class="country-btn" onclick="openCountry('czech')"><span class="flag">🇨🇿</span>Чехія</div>
-        <div class="country-btn" onclick="openCountry('slovakia')"><span class="flag">🇸🇰</span>Словаччина</div>
-        <div class="country-btn" onclick="openCountry('italy')"><span class="flag">🇮🇹</span>Італія</div>
-        <div class="country-btn" onclick="openCountry('hungary')"><span class="flag">🇭🇺</span>Угорщина</div>
-        <div class="country-btn" onclick="openCountry('bulgaria')"><span class="flag">🇧🇬</span>Болгарія</div>
-        <div class="country-btn" onclick="openCountry('general')"><span class="flag">🌍</span>Загальні</div>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('poland')"
+        >
+          <span class="flag">🇵🇱</span>
+          Польща
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('germany')"
+        >
+          <span class="flag">🇩🇪</span>
+          Німеччина
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('czech')"
+        >
+          <span class="flag">🇨🇿</span>
+          Чехія
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('slovakia')"
+        >
+          <span class="flag">🇸🇰</span>
+          Словаччина
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('italy')"
+        >
+          <span class="flag">🇮🇹</span>
+          Італія
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('hungary')"
+        >
+          <span class="flag">🇭🇺</span>
+          Угорщина
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('bulgaria')"
+        >
+          <span class="flag">🇧🇬</span>
+          Болгарія
+        </button>
+
+        <button
+          type="button"
+          class="country-btn"
+          onclick="openCountry('general')"
+        >
+          <span class="flag">🌍</span>
+          Загальні
+        </button>
+
       </div>
+
     </div>
+
+    <!-- POLAND -->
     <div class="country-detail" id="country-poland">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇵🇱 Польща</div>
-      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank" rel="noopener">@pracavpolsku<span>Робота в Польщі</span></a>
-      <a class="job-btn" href="https://t.me/workinpolandi" target="_blank" rel="noopener">@workinpolandi<span>Work in Poland</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
+
+      <button
+        type="button"
+        class="back-btn"
+        onclick="backToCountries()"
+      >
+        ← Назад
+      </button>
+
+      <div style="font-size:18px;margin-bottom:14px;font-weight:700">
+        🇵🇱 Польща
+      </div>
+
+      <a
+        class="job-btn"
+        href="https://t.me/pracavpolsku"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @pracavpolsku
+        <span>Робота в Польщі</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/workinpolandi"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @workinpolandi
+        <span>Work in Poland</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/helpukrainiansjooble"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @helpukrainiansjooble
+        <span>Jooble</span>
+      </a>
+
     </div>
+
+    <!-- GERMANY -->
     <div class="country-detail" id="country-germany">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇩🇪 Німеччина</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank" rel="noopener">@pracavpolsku<span>Робота</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
+
+      <button
+        type="button"
+        class="back-btn"
+        onclick="backToCountries()"
+      >
+        ← Назад
+      </button>
+
+      <div style="font-size:18px;margin-bottom:14px;font-weight:700">
+        🇩🇪 Німеччина
+      </div>
+
+      <a
+        class="job-btn"
+        href="https://t.me/helpukrainiansjooble"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @helpukrainiansjooble
+        <span>Jooble</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/pracavpolsku"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @pracavpolsku
+        <span>Робота</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/europeservicepl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @europeservicepl
+        <span>Europe Service</span>
+      </a>
+
     </div>
+
+    <!-- CZECH -->
     <div class="country-detail" id="country-czech">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇨🇿 Чехія</div>
-      <a class="job-btn" href="https://t.me/dobra_prace" target="_blank" rel="noopener">@dobra_prace<span>Добра праця</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
+
+      <button
+        type="button"
+        class="back-btn"
+        onclick="backToCountries()"
+      >
+        ← Назад
+      </button>
+
+      <div style="font-size:18px;margin-bottom:14px;font-weight:700">
+        🇨🇿 Чехія
+      </div>
+
+      <a
+        class="job-btn"
+        href="https://t.me/dobra_prace"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @dobra_prace
+        <span>Добра праця</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/helpukrainiansjooble"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @helpukrainiansjooble
+        <span>Jooble</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/europeservicepl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @europeservicepl
+        <span>Europe Service</span>
+      </a>
+
     </div>
+
+    <!-- SLOVAKIA -->
     <div class="country-detail" id="country-slovakia">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇸🇰 Словаччина</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/ukrajincivsk" target="_blank" rel="noopener">@ukrajincivsk<span>Українці в СК</span></a>
-      <a class="job-btn" href="https://t.me/slovachyna_pidtrymka" target="_blank" rel="noopener">@slovachyna_pidtrymka<span>Підтримка</span></a>
+
+      <button
+        type="button"
+        class="back-btn"
+        onclick="backToCountries()"
+      >
+        ← Назад
+      </button>
+
+      <div style="font-size:18px;margin-bottom:14px;font-weight:700">
+        🇸🇰 Словаччина
+      </div>
+
+      <a
+        class="job-btn"
+        href="https://t.me/helpukrainiansjooble"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @helpukrainiansjooble
+        <span>Jooble</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/ukrajincivsk"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @ukrajincivsk
+        <span>Українці в СК</span>
+      </a>
+
+      <a
+        class="job-btn"
+        href="https://t.me/slovachyna_pidtrymka"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @slovachyna_pidtrymka
+        <span>Підтримка</span>
+      </a>
+
     </div>
+
+    <!-- ITALY -->
     <div class="country-detail" id="country-italy">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇮🇹 Італія</div>
-      <a class="job-btn" href="https://t.me/dodomu_italia_ucraina" target="_blank" rel="noopener">@dodomu_italia_ucraina<span>Додому Італія</span></a>
-      <a class="job-btn" href="https://t.me/italia_info" target="_blank" rel="noopener">@italia_info<span>Italia Info</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-    </div>
-    <div class="country-detail" id="country-hungary">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇭🇺 Угорщина</div>
-      <a class="job-btn" href="https://t.me/hungary_ukr" target="_blank" rel="noopener">@hungary_ukr<span>Українці в Угорщині</span></a>
-      <a class="job-btn" href="https://t.me/dopomoga_hungary" target="_blank" rel="noopener">@dopomoga_hungary<span>Допомога</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-    </div>
-    <div class="country-detail" id="country-bulgaria">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇧🇬 Болгарія</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-    </div>
-    <div class="country-detail" id="country-general">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
-      <div style="font-size:18px;margin-bottom:14px;font-weight:700">🌍 Загальні</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/outjob" target="_blank" rel="noopener">@outjob<span>Робота за кордоном</span></a>
-      <a class="job-btn" href="https://t.me/jobforukrainians" target="_blank" rel="noopener">@jobforukrainians<span>JOB for Ukrainians</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
-    </div>
-  </div>
 
-  <script>
-    var MAIN_CURRENCIES = ['USD', 'EUR', 'PLN', 'GBP', 'CHF', 'CZK'];
-    var ratesMap = { UAH: 1 };
-    var ratesTimer = null;
+      <button
+        type="button"
+        class="back-btn"
+        onclick="backToCountries()"
+      >
+        ← Назад
+      </button>
 
-    function showPage(name) {
-      try {
-        var pages = document.querySelectorAll('.page');
-        for (var i = 0; i < pages.length; i++) pages[i].classList.remove('active');
-        var navs = document.querySelectorAll('.nav-btn');
-        for (var j = 0; j < navs.length; j++) navs[j].classList.remove('active');
-        document.getElementById('page-' + name).classList.add('active');
-        document.getElementById('nav-' + name).classList.add('active');
-        if (name === 'jobs') backToCountries();
-      } catch (e) { console.log(e); }
-    }
+      <div style="font-size:18px;margin-bottom:14px;font-weight:700">
+        🇮🇹 Італія
+      </div>
 
-    function switchTab(tab) {
-      try {
-        document.getElementById('tab-ton').classList.toggle('active', tab === 'ton');
-        document.getElementById('tab-rates').classList.toggle('active', tab === 'rates');
-        document.getElementById('ton-section').style.display = tab === 'ton' ? 'block' : 'none';
-        document.getElementById('rates-section').style.display = tab === 'rates' ? 'block' : 'none';
-        if (tab === 'rates') {
-          loadRates();
-          if (!ratesTimer) ratesTimer = setInterval(loadRates, 5 * 60 * 1000);
-        }
-      } catch (e) { console.log(e); }
-    }
+      <a
+        class="job-btn"
+        href="https://t.me/dodomu_italia_ucraina"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @dodomu_italia_ucraina
+        <span>Додому Італія</span>
+      </a>
 
-    function openAI() {
-      window.open('https://grok.com', '_blank');
-    }
-
-    function showCards() {
-      document.getElementById('main-buttons').style.display = 'none';
-      document.getElementById('cards-panel').style.display = 'block';
-    }
-    function hideCards() {
-      document.getElementById('cards-panel').style.display = 'none';
-      document.getElementById('main-buttons').style.display = 'flex';
-    }
-
-    function openCountry(id) {
-      document.getElementById('countries-list').style.display = 'none';
-      var details = document.querySelectorAll('.country-detail');
-      for (var i = 0; i < details.length; i++) details[i].classList.remove('active');
-      document.getElementById('country-' + id).classList.add('active');
-    }
-    function backToCountries() {
-      document.getElementById('countries-list').style.display = 'block';
-      var details = document.querySelectorAll('.country-detail');
-      for (var i = 0; i < details.length; i++) details[i].classList.remove('active');
-    }
-
-    function safeFetch(url) {
-      var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-      var timer = null;
-      if (controller) timer = setTimeout(function() { controller.abort(); }, 12000);
-      return fetch(url, controller ? { signal: controller.signal } : undefined)
-        .then(function(res) {
-          if (timer) clearTimeout(timer);
-          if (!res.ok) throw new Error('http');
-          return res.json();
-        })
-        .catch(function(err) {
-          if (timer) clearTimeout(timer);
-          if (!navigator.onLine) throw new Error('offline');
-          if (err && err.name === 'AbortError') throw new Error('timeout');
-          throw err;
-        });
-    }
-
-    function errorText(err) {
-      if (!navigator.onLine || (err && err.message === 'offline')) return 'Немає інтернету';
-      if (err && err.message === 'timeout') return 'Час очікування вичерпано';
-      return 'Помилка завантаження';
-    }
-
-    function loadRates() {
-      var list = document.getElementById('rates-list');
-      var updated = document.getElementById('rates-updated');
-      if (!list) return;
-      list.innerHTML = 'Завантаження...';
-      if (updated) updated.textContent = 'оновлення...';
-
-      safeFetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json')
-        .then(function(data) {
-          ratesMap = { UAH: 1 };
-          for (var i = 0; i < data.length; i++) ratesMap[data[i].cc] = data[i].rate;
-          var html = '';
-          for (var j = 0; j < MAIN_CURRENCIES.length; j++) {
-            var cc = MAIN_CURRENCIES[j];
-            var item = null;
-            for (var k = 0; k < data.length; k++) {
-              if (data[k].cc === cc) { item = data[k]; break; }
-            }
-            if (!item) continue;
-            html += '<div class="rate-row"><div><div class="rate-code">' + item.cc +
-      
+      <a
+        class="job-btn"
+        href="https://t.me/italia_info"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @italia_info
+        <span>Itali
