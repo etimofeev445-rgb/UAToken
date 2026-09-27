@@ -192,7 +192,6 @@
       <div class="buttons">
         <button class="btn btn-card" onclick="toggleCardMenu()">💳 Відкрити карту</button>
         <div class="card-menu" id="card-menu">
-          <a class="card-option" href="https://get.kolo.xyz/p731910" target="_blank">Kolo</a>
           <a class="card-option" href="https://join.simple.app/goldstar" target="_blank">Simple</a>
           <a class="card-option" href="https://krak.app/@Goldstar" target="_blank">Krak</a>
         </div>
@@ -435,4 +434,8 @@
       var list = document.getElementById('tx-list');
       if (!events.length) {
         list.innerHTML = '<div class="tx">Немає транзакцій</div>';
-   
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < events.length; i++) {
+    
