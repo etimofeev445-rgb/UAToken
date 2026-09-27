@@ -69,6 +69,7 @@
       display: block; width: 100%; padding: 15px; border-radius: 16px;
       border: none; font-size: 15px; font-weight: 600;
       text-align: center; text-decoration: none; cursor: pointer;
+      color: inherit;
     }
     .btn-card { background: linear-gradient(135deg, #fdcb6e, #e17055); color: #2d3436; }
     .btn-swap { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
@@ -111,6 +112,35 @@
       color: #00e676; text-align: center;
     }
 
+    #cards-panel { display: none; }
+    .card-item { margin-bottom: 18px; }
+    .card-preview {
+      border-radius: 16px;
+      height: 170px;
+      padding: 18px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #2a2a35;
+    }
+    .card-simple { background: linear-gradient(160deg, #1a1a1a, #000); color: #fff; }
+    .card-kolo { background: linear-gradient(160deg, #3a3a42, #2a2a30); color: #ddd; }
+    .card-krak { background: linear-gradient(160deg, #2a2a2e, #111); color: #fff; }
+    .card-brand { font-size: 22px; font-weight: 700; }
+    .card-type {
+      position: absolute; top: 16px; right: 16px;
+      font-size: 12px; opacity: 0.8; text-align: right; max-width: 90px;
+    }
+    .card-smile {
+      position: absolute; right: 28px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 52px; font-weight: 300; opacity: 0.9;
+    }
+    .card-num {
+      position: absolute; bottom: 16px; left: 18px;
+      font-size: 14px; letter-spacing: 2px; opacity: 0.85;
+    }
+
     .countries-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .country-btn {
       background: #16161d; border: 1px solid #2a2a35; border-radius: 18px;
@@ -147,6 +177,7 @@
     <div class="nav-btn" id="nav-jobs" onclick="showPage('jobs')">📱 Telegram</div>
   </div>
 
+  <!-- КОШЕЛЬОК -->
   <div class="page active" id="page-wallet">
     <div class="network-tabs">
       <div class="tab active" id="tab-ton" onclick="switchTab('ton')">TON</div>
@@ -155,21 +186,55 @@
 
     <div id="ton-section">
       <div id="ton-connect"></div>
+
       <div class="info-box" id="info-box">
         <div class="label">Адреса</div>
         <div class="value" id="address"></div>
         <div class="label" style="margin-top:12px">Баланс</div>
         <div class="balance" id="balance">—</div>
       </div>
+
       <div class="history" id="history">
         <div class="history-title">Історія платежів</div>
         <div id="tx-list">Завантаження...</div>
       </div>
-      <div class="buttons">
-        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Відкрити карту</a>
+
+      <div class="buttons" id="main-buttons">
+        <button class="btn btn-card" type="button" onclick="showCards()">💳 Відкрити карту</button>
         <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
         <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
         <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
+      </div>
+
+      <div id="cards-panel">
+        <button class="back-btn" type="button" onclick="hideCards()">← Назад</button>
+
+        <div class="card-item">
+          <div class="card-preview card-simple">
+            <div class="card-brand">Simple</div>
+            <div class="card-type">Debit</div>
+            <div class="card-smile">:)</div>
+          </div>
+          <a class="btn btn-card" href="https://join.simple.app/goldstar" target="_blank">Відкрити карту Simple</a>
+        </div>
+
+        <div class="card-item">
+          <div class="card-preview card-kolo">
+            <div class="card-brand">kolo</div>
+            <div class="card-type">VISA</div>
+            <div class="card-num">••0318</div>
+          </div>
+          <a class="btn btn-card" href="https://get.kolo.xyz/p731910" target="_blank">Відкрити карту Kolo</a>
+        </div>
+
+        <div class="card-item">
+          <div class="card-preview card-krak">
+            <div class="card-brand">krak</div>
+            <div class="card-type">world elite debit</div>
+            <div class="card-num">•••• 1234</div>
+          </div>
+          <a class="btn btn-card" href="https://krak.app/@Goldstar" target="_blank">Відкрити карту Krak</a>
+        </div>
       </div>
     </div>
 
@@ -212,6 +277,7 @@
     </div>
   </div>
 
+  <!-- TELEGRAM -->
   <div class="page" id="page-jobs">
     <div id="countries-list">
       <div class="countries-grid">
@@ -303,10 +369,17 @@
       document.getElementById('rates-section').style.display = tab === 'rates' ? 'block' : 'none';
       if (tab === 'rates') {
         loadRates();
-        if (!ratesTimer) {
-          ratesTimer = setInterval(loadRates, 5 * 60 * 1000);
-        }
+        if (!ratesTimer) ratesTimer = setInterval(loadRates, 5 * 60 * 1000);
       }
+    }
+
+    function showCards() {
+      document.getElementById('main-buttons').style.display = 'none';
+      document.getElementById('cards-panel').style.display = 'block';
+    }
+    function hideCards() {
+      document.getElementById('cards-panel').style.display = 'none';
+      document.getElementById('main-buttons').style.display = 'flex';
     }
 
     async function loadRates() {
@@ -319,7 +392,6 @@
         for (var i = 0; i < data.length; i++) {
           ratesMap[data[i].cc] = data[i].rate;
         }
-
         var html = '';
         for (var j = 0; j < MAIN_CURRENCIES.length; j++) {
           var cc = MAIN_CURRENCIES[j];
@@ -334,7 +406,6 @@
           html += '<div class="rate-value">' + item.rate.toFixed(2) + ' ₴</div>';
           html += '</div>';
         }
-
         list.innerHTML = html || 'Немає даних';
         var now = new Date();
         updated.textContent = 'оновлено ' + now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
@@ -352,81 +423,9 @@
       var fromRate = ratesMap[from];
       var toRate = ratesMap[to];
       var el = document.getElementById('conv-result');
-      if (!fromRate || !toRate) {
-        el.textContent = '—';
-        return;
-      }
+      if (!fromRate || !toRate) { el.textContent = '—'; return; }
       var result = (amount * fromRate) / toRate;
       el.textContent = result.toLocaleString('uk-UA', { maximumFractionDigits: 2 }) + ' ' + to;
     }
 
-    function openCountry(id) {
-      document.getElementById('countries-list').style.display = 'none';
-      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
-      document.getElementById('country-' + id).classList.add('active');
-    }
-
-    function backToCountries() {
-      document.getElementById('countries-list').style.display = 'block';
-      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
-    }
-
-    var tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
-      buttonRootId: 'ton-connect'
-    });
-
-    tonConnectUI.onStatusChange(async function(wallet) {
-      if (wallet) {
-        showInfo(wallet.account.address);
-        await loadTonData(wallet.account.address);
-      } else {
-        hideInfo();
-      }
-    });
-
-    async function loadTonData(address) {
-      try {
-        var balRes = await fetch('https://tonapi.io/v2/accounts/' + address);
-        var balData = await balRes.json();
-        document.getElementById('balance').textContent = (balData.balance / 1e9).toFixed(4) + ' TON';
-        var txRes = await fetch('https://tonapi.io/v2/accounts/' + address + '/events?limit=6');
-        var txData = await txRes.json();
-        renderHistory(txData.events || []);
-      } catch (e) {
-        document.getElementById('balance').textContent = 'Помилка';
-      }
-    }
-
-    function renderHistory(events) {
-      var list = document.getElementById('tx-list');
-      if (!events.length) {
-        list.innerHTML = '<div class="tx">Немає транзакцій</div>';
-        return;
-      }
-      var html = '';
-      for (var i = 0; i < events.length; i++) {
-        var ev = events[i];
-        var amount = '—';
-        if (ev.actions && ev.actions[0] && ev.actions[0].TonTransfer) {
-          amount = (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON';
-        }
-        html += '<div class="tx"><span>' + new Date(ev.timestamp * 1000).toLocaleDateString() + '</span>';
-        html += '<span class="tx-amount">' + amount + '</span></div>';
-      }
-      list.innerHTML = html;
-    }
-
-    function showInfo(addr) {
-      document.getElementById('address').textContent = addr;
-      document.getElementById('info-box').style.display = 'block';
-      document.getElementById('history').style.display = 'block';
-    }
-
-    function hideInfo() {
-      document.getElementById('info-box').style.display = 'none';
-      document.getElementById('history').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+    functio
