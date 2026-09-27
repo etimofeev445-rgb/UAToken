@@ -39,7 +39,7 @@
       flex-wrap: wrap;
     }
     .nav-btn {
-      flex: 1; min-width: 70px; padding: 12px 8px; border-radius: 14px;
+      flex: 1; min-width: 90px; padding: 12px 8px; border-radius: 14px;
       border: 1px solid #2a2a35; background: #121218;
       color: #8b8b9e; font-size: 13px; font-weight: 600;
       cursor: pointer; text-align: center;
@@ -57,36 +57,7 @@
     }
     .page.active { display: block; }
 
-    .network-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
-    .tab {
-      flex: 1; padding: 11px; border-radius: 14px;
-      border: 1px solid #2a2a35; background: #0f0f14;
-      color: #8b8b9e; font-size: 14px; font-weight: 600;
-      cursor: pointer; text-align: center;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .tab.active { background: #2a2a35; color: #fff; border-color: #00e676; }
-
-    .info-box {
-      background: #121218; border-radius: 16px; padding: 14px;
-      margin-bottom: 14px; display: none;
-    }
-    .label { font-size: 12px; color: #8b8b9e; margin-bottom: 4px; }
-    .value { font-size: 13px; word-break: break-all; color: #00e676; }
-    .balance { font-size: 20px; font-weight: 700; color: #fff; margin-top: 4px; }
-    .history {
-      background: #121218; border-radius: 16px; padding: 14px;
-      margin-bottom: 16px; display: none; max-height: 140px; overflow-y: auto;
-    }
-    .history-title { font-size: 13px; color: #8b8b9e; margin-bottom: 10px; }
-    .tx {
-      font-size: 12px; padding: 8px 0; border-bottom: 1px solid #1f1f28;
-      display: flex; justify-content: space-between;
-    }
-    .tx:last-child { border-bottom: none; }
-    .tx-amount { color: #00e676; }
-
-    .buttons { display: flex; flex-direction: column; gap: 10px; }
+    .buttons { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
     .btn {
       display: block; width: 100%; padding: 15px; border-radius: 16px;
       border: none; font-size: 15px; font-weight: 600;
@@ -98,7 +69,6 @@
     .btn-calc { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
     .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
-    #rates-section { display: none; }
     .rates-box {
       background: #121218; border: 1px solid #2a2a35;
       border-radius: 16px; padding: 16px; margin-bottom: 14px;
@@ -210,70 +180,63 @@
   <div class="header">
     <div class="clock" id="clock">--:--:--</div>
     <h1>UAT App</h1>
-    <p>Кошелёк · Курс НБУ · Telegram</p>
+    <p>Курс НБУ · Telegram · Календар</p>
   </div>
 
   <div class="nav" id="main-nav">
-    <div class="nav-btn active" data-page="wallet">💳 Кошелёк</div>
+    <div class="nav-btn active" data-page="home">🏠 Головна</div>
     <div class="nav-btn" data-page="jobs">📱 Telegram</div>
     <div class="nav-btn" data-page="calendar">📅 Календар</div>
     <div class="nav-btn" data-page="calc">🧮 Калькулятор</div>
   </div>
 
-  <div class="page active" id="page-wallet">
-    <div class="network-tabs" id="network-tabs">
-      <div class="tab active" data-tab="ton">TON</div>
-      <div class="tab" data-tab="rates">Курс</div>
+  <!-- ГОЛОВНА -->
+  <div class="page active" id="page-home">
+    <div class="buttons">
+      <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank" rel="noopener">💳 Відкрити карту</a>
+      <button class="btn btn-calendar" id="btn-go-calendar">📅 Календар</button>
+      <button class="btn btn-calc" id="btn-go-calc">🧮 Калькулятор</button>
+      <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank" rel="noopener">📋 Оголошення</a>
     </div>
 
-    <div id="ton-section">
-      <!-- Кнопки дій -->
-      <div class="buttons">
-        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank" rel="noopener">💳 Відкрити карту</a>
-        <button class="btn btn-calendar" id="btn-go-calendar">📅 Календар</button>
-        <button class="btn btn-calc" id="btn-go-calc">🧮 Калькулятор</button>
-        <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank" rel="noopener">📋 Оголошення</a>
+    <div class="rates-box">
+      <div class="rates-header">
+        <span>Курс НБУ</span>
+        <span id="rates-updated">оновлення...</span>
       </div>
+      <div id="rates-list">Завантаження курсів...</div>
     </div>
 
-    <div id="rates-section">
-      <div class="rates-box">
-        <div class="rates-header">
-          <span>Курс НБУ</span>
-          <span id="rates-updated">оновлення...</span>
-        </div>
-        <div id="rates-list">Завантаження курсів...</div>
+    <div class="converter">
+      <h3>Конвертер</h3>
+      <div class="conv-row">
+        <input type="number" id="conv-amount" value="100" min="0" step="any" inputmode="decimal">
+        <select id="conv-from">
+          <option value="UAH">UAH</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+          <option value="PLN">PLN</option>
+          <option value="GBP">GBP</option>
+          <option value="CHF">CHF</option>
+          <option value="CZK">CZK</option>
+        </select>
       </div>
-      <div class="converter">
-        <h3>Конвертер</h3>
-        <div class="conv-row">
-          <input type="number" id="conv-amount" value="100" min="0" step="any" inputmode="decimal">
-          <select id="conv-from">
-            <option value="UAH">UAH</option>
-            <option value="USD">USD</option>
-            <option value="EUR">EUR</option>
-            <option value="PLN">PLN</option>
-            <option value="GBP">GBP</option>
-            <option value="CHF">CHF</option>
-            <option value="CZK">CZK</option>
-          </select>
-        </div>
-        <div class="conv-row">
-          <select id="conv-to" style="flex:1">
-            <option value="USD">USD</option>
-            <option value="UAH">UAH</option>
-            <option value="EUR">EUR</option>
-            <option value="PLN">PLN</option>
-            <option value="GBP">GBP</option>
-            <option value="CHF">CHF</option>
-            <option value="CZK">CZK</option>
-          </select>
-        </div>
-        <div class="conv-result" id="conv-result">—</div>
+      <div class="conv-row">
+        <select id="conv-to" style="flex:1">
+          <option value="USD">USD</option>
+          <option value="UAH">UAH</option>
+          <option value="EUR">EUR</option>
+          <option value="PLN">PLN</option>
+          <option value="GBP">GBP</option>
+          <option value="CHF">CHF</option>
+          <option value="CZK">CZK</option>
+        </select>
       </div>
+      <div class="conv-result" id="conv-result">—</div>
     </div>
   </div>
 
+  <!-- TELEGRAM -->
   <div class="page" id="page-jobs">
     <div id="countries-list">
       <div class="countries-grid">
@@ -344,6 +307,7 @@
     </div>
   </div>
 
+  <!-- КАЛЕНДАР -->
   <div class="page" id="page-calendar">
     <div class="cal-box">
       <div class="cal-header">
@@ -359,6 +323,7 @@
     </div>
   </div>
 
+  <!-- КАЛЬКУЛЯТОР -->
   <div class="page" id="page-calc">
     <div class="calc-box">
       <div class="calc-display" id="calc-display">0</div>
@@ -402,7 +367,7 @@
 
       // ===== Навігація =====
       var pages = {
-        wallet: document.getElementById('page-wallet'),
+        home: document.getElementById('page-home'),
         jobs: document.getElementById('page-jobs'),
         calendar: document.getElementById('page-calendar'),
         calc: document.getElementById('page-calc')
@@ -418,6 +383,7 @@
         }
         if (page === 'jobs') backToCountries();
         if (page === 'calendar') renderCalendar();
+        if (page === 'home') loadRates();
       }
 
       document.getElementById('main-nav').addEventListener('click', function (e) {
@@ -427,7 +393,7 @@
         if (page) showPage(page);
       });
 
-      // Кнопки швидкого переходу
+      // Швидкі кнопки
       document.getElementById('btn-go-calendar').addEventListener('click', function () {
         showPage('calendar');
       });
@@ -435,8 +401,41 @@
         showPage('calc');
       });
 
-      // ===== Вкладки TON / Курс =====
-      var tonSection = document.getElementById('ton-section');
-      var ratesSection = document.getElementById('rates-section');
+      // ===== Курси НБУ =====
+      var ratesMap = { UAH: 1 };
+      var MAIN_CURRENCIES = ['USD', 'EUR', 'PLN', 'GBP', 'CHF', 'CZK'];
 
-      document.getElementById('n
+      async function loadRates() {
+        var list = document.getElementById('rates-list');
+        var updated = document.getElementById('rates-updated');
+        try {
+          var res = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+          var data = await res.json();
+          ratesMap = { UAH: 1 };
+          var map = {};
+          for (var i = 0; i < data.length; i++) {
+            ratesMap[data[i].cc] = data[i].rate;
+            map[data[i].cc] = data[i];
+          }
+          var html = [];
+          for (var j = 0; j < MAIN_CURRENCIES.length; j++) {
+            var item = map[MAIN_CURRENCIES[j]];
+            if (!item) continue;
+            html.push('<div class="rate-row"><div><div class="rate-code">' + item.cc +
+              '</div><div class="rate-name">' + item.txt +
+              '</div></div><div class="rate-value">' + item.rate.toFixed(2) + ' ₴</div></div>');
+          }
+          list.innerHTML = html.length ? html.join('') : 'Немає даних';
+          updated.textContent = 'оновлено ' + new Date().toLocaleTimeString('uk-UA', {hour:'2-digit', minute:'2-digit'});
+          convert();
+        } catch (e) {
+          list.innerHTML = 'Помилка завантаження';
+          updated.textContent = 'помилка';
+        }
+      }
+
+      function convert() {
+        var amount = parseFloat(document.getElementById('conv-amount').value) || 0;
+        var from = document.getElementById('conv-from').value;
+        var to = document.getElementById('conv-to').value;
+        var fromRate = ratesM
