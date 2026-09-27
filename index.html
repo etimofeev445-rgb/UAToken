@@ -75,29 +75,7 @@
     .btn-buy { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
-    .card-menu {
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 8px;
-      margin-bottom: 4px;
-    }
-    .card-menu.open { display: flex; }
-    .card-option {
-      display: block;
-      width: 100%;
-      padding: 13px;
-      border-radius: 14px;
-      border: 1px solid #2a2a35;
-      background: #1a1a22;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      text-align: center;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .card-option:active { background: #252530; }
+    /* card menu styles removed — only one card left */
 
     #rates-section { display: none; }
     .rates-box {
@@ -190,10 +168,7 @@
         <div id="tx-list">Завантаження...</div>
       </div>
       <div class="buttons">
-        <button class="btn btn-card" onclick="toggleCardMenu()">💳 Відкрити карту</button>
-        <div class="card-menu" id="card-menu">
-          <a class="card-option" href="https://krak.app/@Goldstar" target="_blank">Krak</a>
-        </div>
+        <a class="btn btn-card" href="https://krak.app/@Goldstar" target="_blank">💳 Відкрити карту</a>
         <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
         <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
         <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
@@ -315,10 +290,6 @@
     var ratesMap = { UAH: 1 };
     var ratesTimer = null;
 
-    function toggleCardMenu() {
-      document.getElementById('card-menu').classList.toggle('open');
-    }
-
     function showPage(page) {
       document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
       document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
@@ -402,30 +373,43 @@
       document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
     }
 
-    var tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
-      buttonRootId: 'ton-connect'
-    });
+    var tonConnectUI = null;
+    try {
+      if (typeof TON_CONNECT_UI !== 'undefined') {
+        tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+          manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
+          buttonRootId: 'ton-connect'
+        });
 
-    tonConnectUI.onStatusChange(async function(wallet) {
-      if (wallet) {
-        showInfo(wallet.account.address);
-        await loadTonData(wallet.account.address);
+        tonConnectUI.onStatusChange(async function(wallet) {
+          if (wallet) {
+            showInfo(wallet.account.address);
+            await loadTonData(wallet.account.address);
+          } else {
+            hideInfo();
+          }
+        });
       } else {
-        hideInfo();
+        console.warn('TON Connect UI library not loaded');
       }
-    });
+    } catch (e) {
+      console.error('TON Connect init error:', e);
+    }
 
     async function loadTonData(address) {
       try {
         var balRes = await fetch('https://tonapi.io/v2/accounts/' + address);
         var balData = await balRes.json();
         document.getElementById('balance').textContent = (balData.balance / 1e9).toFixed(4) + ' TON';
+      } catch (e) {
+        document.getElementById('balance').textContent = 'Помилка';
+      }
+      try {
         var txRes = await fetch('https://tonapi.io/v2/accounts/' + address + '/events?limit=6');
         var txData = await txRes.json();
         renderHistory(txData.events || []);
       } catch (e) {
-        document.getElementById('balance').textContent = 'Помилка';
+        document.getElementById('tx-list').innerHTML = '<div class="tx">Помилка завантаження</div>';
       }
     }
 
@@ -439,4 +423,10 @@
       for (var i = 0; i < events.length; i++) {
         var ev = events[i];
         var amount = '—';
-        if (ev.actions && ev.actions[0] && ev.acti
+        if (ev.actions && ev.actions[0] && ev.actions[0].TonTransfer) {
+          amount = (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON';
+        }
+        html += '<div class="tx"><span>' + new Date(ev.timestamp * 1000).toLocaleDateString() + '</span>';
+        html += '<span class="tx-amount">' + amount + '</span></div>';
+      }
+      l
