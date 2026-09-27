@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>UAT App</title>
   <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
   <style>
@@ -13,26 +13,52 @@
       color: #fff;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       padding-bottom: 40px;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
     }
-    .header { text-align: center; padding: 24px 20px 12px; }
+    .header {
+      text-align: center;
+      padding: 24px 20px 12px;
+      position: relative;
+    }
+    .clock {
+      position: absolute;
+      left: 16px;
+      top: 28px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #00e676;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.5px;
+    }
     .header h1 { font-size: 24px; font-weight: 700; }
     .header p { color: #8b8b9e; font-size: 13px; margin-top: 4px; }
 
     .nav {
       display: flex; gap: 8px; padding: 0 16px 18px;
       max-width: 480px; margin: 0 auto;
+      flex-wrap: wrap;
     }
     .nav-btn {
-      flex: 1; padding: 12px; border-radius: 14px;
+      flex: 1; min-width: 70px; padding: 12px 8px; border-radius: 14px;
       border: 1px solid #2a2a35; background: #121218;
-      color: #8b8b9e; font-size: 14px; font-weight: 600;
+      color: #8b8b9e; font-size: 13px; font-weight: 600;
       cursor: pointer; text-align: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
     .nav-btn.active {
       background: #1f1f2a; color: #fff; border-color: #00e676;
     }
 
-    .page { display: none; max-width: 480px; margin: 0 auto; padding: 0 16px; }
+    .page {
+      display: none;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px;
+      content-visibility: auto;
+      contain: layout style;
+    }
     .page.active { display: block; }
 
     .network-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
@@ -41,6 +67,8 @@
       border: 1px solid #2a2a35; background: #0f0f14;
       color: #8b8b9e; font-size: 14px; font-weight: 600;
       cursor: pointer; text-align: center;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
     .tab.active { background: #2a2a35; color: #fff; border-color: #00e676; }
 
@@ -55,6 +83,7 @@
     .history {
       background: #121218; border-radius: 16px; padding: 14px;
       margin-bottom: 16px; display: none; max-height: 140px; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .history-title { font-size: 13px; color: #8b8b9e; margin-bottom: 10px; }
     .tx {
@@ -69,6 +98,7 @@
       display: block; width: 100%; padding: 15px; border-radius: 16px;
       border: none; font-size: 15px; font-weight: 600;
       text-align: center; text-decoration: none; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-card { background: linear-gradient(135deg, #fdcb6e, #e17055); color: #2d3436; }
     .btn-swap { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
@@ -116,6 +146,7 @@
       background: #16161d; border: 1px solid #2a2a35; border-radius: 18px;
       padding: 22px 12px; text-align: center; cursor: pointer;
       font-size: 15px; font-weight: 600; color: #fff;
+      -webkit-tap-highlight-color: transparent;
     }
     .country-btn:active { transform: scale(0.97); background: #1f1f28; }
     .country-btn .flag { font-size: 28px; display: block; margin-bottom: 8px; }
@@ -126,6 +157,7 @@
       background: #1a1a22; border: 1px solid #2a2a35; border-radius: 12px;
       padding: 10px 16px; color: #fff; font-size: 14px;
       margin-bottom: 18px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .job-btn {
       display: block; background: #121218; border: 1px solid #2a2a35;
@@ -133,24 +165,88 @@
       text-decoration: none; font-size: 14px; margin-bottom: 8px;
     }
     .job-btn span { display: block; color: #8b8b9e; font-size: 12px; margin-top: 2px; }
+
+    /* Календар */
+    .cal-box {
+      background: #121218; border: 1px solid #2a2a35;
+      border-radius: 16px; padding: 16px; margin-bottom: 16px;
+    }
+    .cal-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 14px;
+    }
+    .cal-header button {
+      background: #1a1a22; border: 1px solid #2a2a35; border-radius: 10px;
+      color: #fff; width: 36px; height: 36px; font-size: 18px; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .cal-title { font-size: 16px; font-weight: 600; }
+    .cal-weekdays {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      text-align: center; font-size: 12px; color: #8b8b9e; margin-bottom: 8px;
+    }
+    .cal-days {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+    }
+    .cal-day {
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; font-size: 14px;
+    }
+    .cal-day.other { color: #3a3a45; }
+    .cal-day.today {
+      background: #00e676; color: #0b0b0f; font-weight: 700;
+    }
+    .cal-today-info {
+      text-align: center; margin-top: 14px; font-size: 14px; color: #8b8b9e;
+    }
+
+    /* Калькулятор */
+    .calc-box {
+      background: #121218; border: 1px solid #2a2a35;
+      border-radius: 16px; padding: 16px;
+    }
+    .calc-display {
+      background: #0f0f14; border-radius: 12px; padding: 18px 14px;
+      text-align: right; font-size: 28px; font-weight: 600;
+      min-height: 60px; word-break: break-all; margin-bottom: 12px;
+      color: #00e676;
+    }
+    .calc-buttons {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    }
+    .calc-btn {
+      padding: 16px 0; border-radius: 12px; border: none;
+      font-size: 18px; font-weight: 600; cursor: pointer;
+      background: #1a1a22; color: #fff;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.1s;
+    }
+    .calc-btn:active { background: #2a2a35; }
+    .calc-btn.op { background: #2a2a35; color: #00e676; }
+    .calc-btn.eq { background: #00e676; color: #0b0b0f; }
+    .calc-btn.clear { background: #e17055; color: #fff; }
+    .calc-btn.zero { grid-column: span 2; }
   </style>
 </head>
 <body>
 
   <div class="header">
+    <div class="clock" id="clock">00:00:00</div>
     <h1>UAT App</h1>
     <p>Кошелёк · Курс НБУ · Telegram</p>
   </div>
 
   <div class="nav">
-    <div class="nav-btn active" id="nav-wallet" onclick="showPage('wallet')">💳 Кошелёк</div>
-    <div class="nav-btn" id="nav-jobs" onclick="showPage('jobs')">📱 Telegram</div>
+    <div class="nav-btn active" id="nav-wallet" data-page="wallet">💳 Кошелёк</div>
+    <div class="nav-btn" id="nav-jobs" data-page="jobs">📱 Telegram</div>
+    <div class="nav-btn" id="nav-calendar" data-page="calendar">📅 Календар</div>
+    <div class="nav-btn" id="nav-calc" data-page="calc">🧮 Калькулятор</div>
   </div>
 
   <div class="page active" id="page-wallet">
     <div class="network-tabs">
-      <div class="tab active" id="tab-ton" onclick="switchTab('ton')">TON</div>
-      <div class="tab" id="tab-rates" onclick="switchTab('rates')">Курс</div>
+      <div class="tab active" id="tab-ton" data-tab="ton">TON</div>
+      <div class="tab" id="tab-rates" data-tab="rates">Курс</div>
     </div>
 
     <div id="ton-section">
@@ -166,10 +262,10 @@
         <div id="tx-list">Завантаження...</div>
       </div>
       <div class="buttons">
-        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Відкрити карту</a>
-        <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
-        <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
-        <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
+        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank" rel="noopener">💳 Відкрити карту</a>
+        <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank" rel="noopener">🔄 Обмін</a>
+        <a class="btn btn-buy" href="#" id="btn-buy-uat">💰 Купити UAT</a>
+        <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank" rel="noopener">📋 Оголошення</a>
       </div>
     </div>
 
@@ -185,8 +281,8 @@
       <div class="converter">
         <h3>Конвертер</h3>
         <div class="conv-row">
-          <input type="number" id="conv-amount" value="100" min="0" step="any" oninput="convert()">
-          <select id="conv-from" onchange="convert()">
+          <input type="number" id="conv-amount" value="100" min="0" step="any" inputmode="decimal">
+          <select id="conv-from">
             <option value="UAH">UAH</option>
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
@@ -197,7 +293,7 @@
           </select>
         </div>
         <div class="conv-row">
-          <select id="conv-to" onchange="convert()" style="flex:1">
+          <select id="conv-to" style="flex:1">
             <option value="USD">USD</option>
             <option value="UAH">UAH</option>
             <option value="EUR">EUR</option>
@@ -215,217 +311,132 @@
   <div class="page" id="page-jobs">
     <div id="countries-list">
       <div class="countries-grid">
-        <div class="country-btn" onclick="openCountry('poland')"><span class="flag">🇵🇱</span>Польща</div>
-        <div class="country-btn" onclick="openCountry('germany')"><span class="flag">🇩🇪</span>Німеччина</div>
-        <div class="country-btn" onclick="openCountry('czech')"><span class="flag">🇨🇿</span>Чехія</div>
-        <div class="country-btn" onclick="openCountry('slovakia')"><span class="flag">🇸🇰</span>Словаччина</div>
-        <div class="country-btn" onclick="openCountry('italy')"><span class="flag">🇮🇹</span>Італія</div>
-        <div class="country-btn" onclick="openCountry('hungary')"><span class="flag">🇭🇺</span>Угорщина</div>
-        <div class="country-btn" onclick="openCountry('bulgaria')"><span class="flag">🇧🇬</span>Болгарія</div>
-        <div class="country-btn" onclick="openCountry('general')"><span class="flag">🌍</span>Загальні</div>
+        <div class="country-btn" data-country="poland"><span class="flag">🇵🇱</span>Польща</div>
+        <div class="country-btn" data-country="germany"><span class="flag">🇩🇪</span>Німеччина</div>
+        <div class="country-btn" data-country="czech"><span class="flag">🇨🇿</span>Чехія</div>
+        <div class="country-btn" data-country="slovakia"><span class="flag">🇸🇰</span>Словаччина</div>
+        <div class="country-btn" data-country="italy"><span class="flag">🇮🇹</span>Італія</div>
+        <div class="country-btn" data-country="hungary"><span class="flag">🇭🇺</span>Угорщина</div>
+        <div class="country-btn" data-country="bulgaria"><span class="flag">🇧🇬</span>Болгарія</div>
+        <div class="country-btn" data-country="general"><span class="flag">🌍</span>Загальні</div>
       </div>
     </div>
 
     <div class="country-detail" id="country-poland">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇵🇱 Польща</div>
-      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank">@pracavpolsku<span>Робота в Польщі</span></a>
-      <a class="job-btn" href="https://t.me/workinpolandi" target="_blank">@workinpolandi<span>Work in Poland</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank" rel="noopener">@pracavpolsku<span>Робота в Польщі</span></a>
+      <a class="job-btn" href="https://t.me/workinpolandi" target="_blank" rel="noopener">@workinpolandi<span>Work in Poland</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
     <div class="country-detail" id="country-germany">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇩🇪 Німеччина</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank">@pracavpolsku<span>Робота</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank">@europeservicepl<span>Europe Service</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank" rel="noopener">@pracavpolsku<span>Робота</span></a>
+      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
     </div>
     <div class="country-detail" id="country-czech">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇨🇿 Чехія</div>
-      <a class="job-btn" href="https://t.me/dobra_prace" target="_blank">@dobra_prace<span>Добра праця</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank">@europeservicepl<span>Europe Service</span></a>
+      <a class="job-btn" href="https://t.me/dobra_prace" target="_blank" rel="noopener">@dobra_prace<span>Добра праця</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
     </div>
     <div class="country-detail" id="country-slovakia">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇸🇰 Словаччина</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/ukrajincivsk" target="_blank">@ukrajincivsk<span>Українці в СК</span></a>
-      <a class="job-btn" href="https://t.me/slovachyna_pidtrymka" target="_blank">@slovachyna_pidtrymka<span>Підтримка</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/ukrajincivsk" target="_blank" rel="noopener">@ukrajincivsk<span>Українці в СК</span></a>
+      <a class="job-btn" href="https://t.me/slovachyna_pidtrymka" target="_blank" rel="noopener">@slovachyna_pidtrymka<span>Підтримка</span></a>
     </div>
     <div class="country-detail" id="country-italy">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇮🇹 Італія</div>
-      <a class="job-btn" href="https://t.me/dodomu_italia_ucraina" target="_blank">@dodomu_italia_ucraina<span>Додому Італія</span></a>
-      <a class="job-btn" href="https://t.me/italia_info" target="_blank">@italia_info<span>Italia Info</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/dodomu_italia_ucraina" target="_blank" rel="noopener">@dodomu_italia_ucraina<span>Додому Італія</span></a>
+      <a class="job-btn" href="https://t.me/italia_info" target="_blank" rel="noopener">@italia_info<span>Italia Info</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
     <div class="country-detail" id="country-hungary">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇭🇺 Угорщина</div>
-      <a class="job-btn" href="https://t.me/hungary_ukr" target="_blank">@hungary_ukr<span>Українці в Угорщині</span></a>
-      <a class="job-btn" href="https://t.me/dopomoga_hungary" target="_blank">@dopomoga_hungary<span>Допомога</span></a>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/hungary_ukr" target="_blank" rel="noopener">@hungary_ukr<span>Українці в Угорщині</span></a>
+      <a class="job-btn" href="https://t.me/dopomoga_hungary" target="_blank" rel="noopener">@dopomoga_hungary<span>Допомога</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
     <div class="country-detail" id="country-bulgaria">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇧🇬 Болгарія</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
     <div class="country-detail" id="country-general">
-      <div class="back-btn" onclick="backToCountries()">← Назад</div>
+      <div class="back-btn" data-back>← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🌍 Загальні</div>
-      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
-      <a class="job-btn" href="https://t.me/outjob" target="_blank">@outjob<span>Робота за кордоном</span></a>
-      <a class="job-btn" href="https://t.me/jobforukrainians" target="_blank">@jobforukrainians<span>JOB for Ukrainians</span></a>
-      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank">@europeservicepl<span>Europe Service</span></a>
+      <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank" rel="noopener">@helpukrainiansjooble<span>Jooble</span></a>
+      <a class="job-btn" href="https://t.me/outjob" target="_blank" rel="noopener">@outjob<span>Робота за кордоном</span></a>
+      <a class="job-btn" href="https://t.me/jobforukrainians" target="_blank" rel="noopener">@jobforukrainians<span>JOB for Ukrainians</span></a>
+      <a class="job-btn" href="https://t.me/europeservicepl" target="_blank" rel="noopener">@europeservicepl<span>Europe Service</span></a>
+    </div>
+  </div>
+
+  <div class="page" id="page-calendar">
+    <div class="cal-box">
+      <div class="cal-header">
+        <button id="cal-prev" type="button">‹</button>
+        <div class="cal-title" id="cal-title">—</div>
+        <button id="cal-next" type="button">›</button>
+      </div>
+      <div class="cal-weekdays">
+        <div>Пн</div><div>Вт</div><div>Ср</div><div>Чт</div><div>Пт</div><div>Сб</div><div>Нд</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+      <div class="cal-today-info" id="cal-today-info"></div>
+    </div>
+  </div>
+
+  <div class="page" id="page-calc">
+    <div class="calc-box">
+      <div class="calc-display" id="calc-display">0</div>
+      <div class="calc-buttons" id="calc-buttons">
+        <button class="calc-btn clear" data-action="clear">C</button>
+        <button class="calc-btn op" data-val="/">÷</button>
+        <button class="calc-btn op" data-val="*">×</button>
+        <button class="calc-btn op" data-val="-">−</button>
+        <button class="calc-btn" data-val="7">7</button>
+        <button class="calc-btn" data-val="8">8</button>
+        <button class="calc-btn" data-val="9">9</button>
+        <button class="calc-btn op" data-val="+">+</button>
+        <button class="calc-btn" data-val="4">4</button>
+        <button class="calc-btn" data-val="5">5</button>
+        <button class="calc-btn" data-val="6">6</button>
+        <button class="calc-btn eq" data-action="equals" style="grid-row: span 2">=</button>
+        <button class="calc-btn" data-val="1">1</button>
+        <button class="calc-btn" data-val="2">2</button>
+        <button class="calc-btn" data-val="3">3</button>
+        <button class="calc-btn zero" data-val="0">0</button>
+        <button class="calc-btn" data-val=".">.</button>
+      </div>
     </div>
   </div>
 
   <script>
-    var MAIN_CURRENCIES = ['USD', 'EUR', 'PLN', 'GBP', 'CHF', 'CZK'];
-    var ratesMap = { UAH: 1 };
-    var ratesTimer = null;
+    (function () {
+      'use strict';
 
-    function showPage(page) {
-      document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-      document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
-      document.getElementById('page-' + page).classList.add('active');
-      document.getElementById('nav-' + page).classList.add('active');
-      if (page === 'jobs') backToCountries();
-    }
-
-    function switchTab(tab) {
-      document.getElementById('tab-ton').classList.toggle('active', tab === 'ton');
-      document.getElementById('tab-rates').classList.toggle('active', tab === 'rates');
-      document.getElementById('ton-section').style.display = tab === 'ton' ? 'block' : 'none';
-      document.getElementById('rates-section').style.display = tab === 'rates' ? 'block' : 'none';
-      if (tab === 'rates') {
-        loadRates();
-        if (!ratesTimer) {
-          ratesTimer = setInterval(loadRates, 5 * 60 * 1000);
-        }
-      }
-    }
-
-    async function loadRates() {
-      var list = document.getElementById('rates-list');
-      var updated = document.getElementById('rates-updated');
-      try {
-        var res = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
-        var data = await res.json();
-        ratesMap = { UAH: 1 };
-        for (var i = 0; i < data.length; i++) {
-          ratesMap[data[i].cc] = data[i].rate;
-        }
-
-        var html = '';
-        for (var j = 0; j < MAIN_CURRENCIES.length; j++) {
-          var cc = MAIN_CURRENCIES[j];
-          var item = null;
-          for (var k = 0; k < data.length; k++) {
-            if (data[k].cc === cc) { item = data[k]; break; }
-          }
-          if (!item) continue;
-          html += '<div class="rate-row">';
-          html += '<div><div class="rate-code">' + item.cc + '</div>';
-          html += '<div class="rate-name">' + item.txt + '</div></div>';
-          html += '<div class="rate-value">' + item.rate.toFixed(2) + ' ₴</div>';
-          html += '</div>';
-        }
-
-        list.innerHTML = html || 'Немає даних';
-        var now = new Date();
-        updated.textContent = 'оновлено ' + now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
-        convert();
-      } catch (e) {
-        list.innerHTML = 'Помилка завантаження курсу НБУ';
-        updated.textContent = 'помилка';
-      }
-    }
-
-    function convert() {
-      var amount = parseFloat(document.getElementById('conv-amount').value) || 0;
-      var from = document.getElementById('conv-from').value;
-      var to = document.getElementById('conv-to').value;
-      var fromRate = ratesMap[from];
-      var toRate = ratesMap[to];
-      var el = document.getElementById('conv-result');
-      if (!fromRate || !toRate) {
-        el.textContent = '—';
-        return;
-      }
-      var result = (amount * fromRate) / toRate;
-      el.textContent = result.toLocaleString('uk-UA', { maximumFractionDigits: 2 }) + ' ' + to;
-    }
-
-    function openCountry(id) {
-      document.getElementById('countries-list').style.display = 'none';
-      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
-      document.getElementById('country-' + id).classList.add('active');
-    }
-
-    function backToCountries() {
-      document.getElementById('countries-list').style.display = 'block';
-      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
-    }
-
-    var tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
-      buttonRootId: 'ton-connect'
-    });
-
-    tonConnectUI.onStatusChange(async function(wallet) {
-      if (wallet) {
-        showInfo(wallet.account.address);
-        await loadTonData(wallet.account.address);
-      } else {
-        hideInfo();
-      }
-    });
-
-    async function loadTonData(address) {
-      try {
-        var balRes = await fetch('https://tonapi.io/v2/accounts/' + address);
-        var balData = await balRes.json();
-        document.getElementById('balance').textContent = (balData.balance / 1e9).toFixed(4) + ' TON';
-        var txRes = await fetch('https://tonapi.io/v2/accounts/' + address + '/events?limit=6');
-        var txData = await txRes.json();
-        renderHistory(txData.events || []);
-      } catch (e) {
-        document.getElementById('balance').textContent = 'Помилка';
-      }
-    }
-
-    function renderHistory(events) {
-      var list = document.getElementById('tx-list');
-      if (!events.length) {
-        list.innerHTML = '<div class="tx">Немає транзакцій</div>';
-        return;
-      }
-      var html = '';
-      for (var i = 0; i < events.length; i++) {
-        var ev = events[i];
-        var amount = '—';
-        if (ev.actions && ev.actions[0] && ev.actions[0].TonTransfer) {
-          amount = (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON';
-        }
-        html += '<div class="tx"><span>' + new Date(ev.timestamp * 1000).toLocaleDateString() + '</span>';
-        html += '<span class="tx-amount">' + amount + '</span></div>';
-      }
-      list.innerHTML = html;
-    }
-
-    function showInfo(addr) {
-      document.getElementById('address').textContent = addr;
-      document.getElementById('info-box').style.display = 'block';
-      document.getElementById('history').style.display = 'block';
-    }
-
-    function hideInfo() {
-      document.getElementById('info-box').style.display = 'none';
-      document.getElementById('history').style.display = 'none';
-    }
-  </script>
-</body>
+      // ===== Кешовані елементи =====
+      var $ = function (id) { return document.getElementById(id); };
+      var pages = {
+        wallet: $('page-wallet'),
+        jobs: $('page-jobs'),
+        calendar: $('page-calendar'),
+        calc: $('page-calc')
+      };
+      var navBtns = {
+        wallet: $('nav-wallet'),
+        jobs: $('nav-jobs'),
+        calendar: $('nav-calendar'),
+        calc: $('nav-calc')
+      };
+      var tonSection = $('ton-section');
+      var ratesSection = $('rates-section');
+      var tabT
