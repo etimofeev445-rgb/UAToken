@@ -192,7 +192,6 @@
       <div class="buttons">
         <button class="btn btn-card" onclick="toggleCardMenu()">💳 Відкрити карту</button>
         <div class="card-menu" id="card-menu">
-          <a class="card-option" href="https://join.simple.app/goldstar" target="_blank">Simple</a>
           <a class="card-option" href="https://krak.app/@Goldstar" target="_blank">Krak</a>
         </div>
         <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
@@ -438,4 +437,6 @@
       }
       var html = '';
       for (var i = 0; i < events.length; i++) {
-    
+        var ev = events[i];
+        var amount = '—';
+        if (ev.actions && ev.actions[0] && ev.acti
