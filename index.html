@@ -43,12 +43,8 @@
       cursor: pointer; text-align: center;
     }
     .tab.active { background: #2a2a35; color: #fff; border-color: #00e676; }
+
     #ton-connect { display: flex; justify-content: center; margin-bottom: 14px; }
-    .tron-btn {
-      width: 100%; padding: 13px; border-radius: 16px; border: none;
-      background: #ef0027; color: white; font-size: 15px; font-weight: 600;
-      cursor: pointer; margin-bottom: 14px; display: none;
-    }
     .info-box {
       background: #121218; border-radius: 16px; padding: 14px;
       margin-bottom: 14px; display: none;
@@ -79,6 +75,42 @@
     .btn-buy { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
+    #rates-section { display: none; }
+    .rates-box {
+      background: #121218; border: 1px solid #2a2a35;
+      border-radius: 16px; padding: 16px; margin-bottom: 14px;
+    }
+    .rates-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px; font-size: 13px; color: #8b8b9e;
+    }
+    .rate-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid #1f1f28; font-size: 15px;
+    }
+    .rate-row:last-child { border-bottom: none; }
+    .rate-code { font-weight: 700; }
+    .rate-name { font-size: 12px; color: #8b8b9e; }
+    .rate-value { color: #00e676; font-weight: 600; }
+
+    .converter {
+      background: #121218; border: 1px solid #2a2a35;
+      border-radius: 16px; padding: 16px; margin-bottom: 16px;
+    }
+    .converter h3 { font-size: 15px; margin-bottom: 12px; font-weight: 600; }
+    .conv-row { display: flex; gap: 8px; margin-bottom: 10px; }
+    .conv-row input, .conv-row select {
+      flex: 1; padding: 12px; border-radius: 12px;
+      border: 1px solid #2a2a35; background: #0f0f14;
+      color: #fff; font-size: 15px; outline: none;
+    }
+    .conv-row input:focus, .conv-row select:focus { border-color: #00e676; }
+    .conv-result {
+      margin-top: 8px; padding: 12px; border-radius: 12px;
+      background: #0f0f14; font-size: 16px; font-weight: 600;
+      color: #00e676; text-align: center;
+    }
+
     .countries-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .country-btn {
       background: #16161d; border: 1px solid #2a2a35; border-radius: 18px;
@@ -107,7 +139,7 @@
 
   <div class="header">
     <h1>UAT App</h1>
-    <p>Кошелёк · Telegram · Оголошення</p>
+    <p>Кошелёк · Курс НБУ · Telegram</p>
   </div>
 
   <div class="nav">
@@ -115,37 +147,71 @@
     <div class="nav-btn" id="nav-jobs" onclick="showPage('jobs')">📱 Telegram</div>
   </div>
 
-  <!-- КОШЕЛЬОК -->
   <div class="page active" id="page-wallet">
     <div class="network-tabs">
-      <div class="tab active" id="tab-ton" onclick="switchNetwork('ton')">TON</div>
-      <div class="tab" id="tab-tron" onclick="switchNetwork('tron')">Tron</div>
+      <div class="tab active" id="tab-ton" onclick="switchTab('ton')">TON</div>
+      <div class="tab" id="tab-rates" onclick="switchTab('rates')">Курс</div>
     </div>
 
-    <div id="ton-section"><div id="ton-connect"></div></div>
-    <button class="tron-btn" id="tron-btn" onclick="connectTron()">Підключити Tron</button>
-
-    <div class="info-box" id="info-box">
-      <div class="label">Адреса</div>
-      <div class="value" id="address"></div>
-      <div class="label" style="margin-top:12px">Баланс</div>
-      <div class="balance" id="balance">—</div>
+    <div id="ton-section">
+      <div id="ton-connect"></div>
+      <div class="info-box" id="info-box">
+        <div class="label">Адреса</div>
+        <div class="value" id="address"></div>
+        <div class="label" style="margin-top:12px">Баланс</div>
+        <div class="balance" id="balance">—</div>
+      </div>
+      <div class="history" id="history">
+        <div class="history-title">Історія платежів</div>
+        <div id="tx-list">Завантаження...</div>
+      </div>
+      <div class="buttons">
+        <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Відкрити карту</a>
+        <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
+        <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
+        <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
+      </div>
     </div>
 
-    <div class="history" id="history">
-      <div class="history-title">Історія платежів</div>
-      <div id="tx-list">Завантаження...</div>
-    </div>
+    <div id="rates-section">
+      <div class="rates-box">
+        <div class="rates-header">
+          <span>Курс НБУ</span>
+          <span id="rates-updated">оновлення...</span>
+        </div>
+        <div id="rates-list">Завантаження курсів...</div>
+      </div>
 
-    <div class="buttons">
-      <a class="btn btn-card" href="https://krak.app/@UAToken" target="_blank">💳 Відкрити карту</a>
-      <a class="btn btn-swap" href="https://app.ston.fi/" target="_blank">🔄 Обмін</a>
-      <a class="btn btn-buy" href="#" onclick="alert('Покупка UAT в розробці')">💰 Купити UAT</a>
-      <a class="btn btn-ads" href="https://t.me/obyavIeni" target="_blank">📋 Оголошення</a>
+      <div class="converter">
+        <h3>Конвертер</h3>
+        <div class="conv-row">
+          <input type="number" id="conv-amount" value="100" min="0" step="any" oninput="convert()">
+          <select id="conv-from" onchange="convert()">
+            <option value="UAH">UAH</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="PLN">PLN</option>
+            <option value="GBP">GBP</option>
+            <option value="CHF">CHF</option>
+            <option value="CZK">CZK</option>
+          </select>
+        </div>
+        <div class="conv-row">
+          <select id="conv-to" onchange="convert()" style="flex:1">
+            <option value="USD">USD</option>
+            <option value="UAH">UAH</option>
+            <option value="EUR">EUR</option>
+            <option value="PLN">PLN</option>
+            <option value="GBP">GBP</option>
+            <option value="CHF">CHF</option>
+            <option value="CZK">CZK</option>
+          </select>
+        </div>
+        <div class="conv-result" id="conv-result">—</div>
+      </div>
     </div>
   </div>
 
-  <!-- TELEGRAM -->
   <div class="page" id="page-jobs">
     <div id="countries-list">
       <div class="countries-grid">
@@ -167,7 +233,6 @@
       <a class="job-btn" href="https://t.me/workinpolandi" target="_blank">@workinpolandi<span>Work in Poland</span></a>
       <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
-
     <div class="country-detail" id="country-germany">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇩🇪 Німеччина</div>
@@ -175,7 +240,6 @@
       <a class="job-btn" href="https://t.me/pracavpolsku" target="_blank">@pracavpolsku<span>Робота</span></a>
       <a class="job-btn" href="https://t.me/europeservicepl" target="_blank">@europeservicepl<span>Europe Service</span></a>
     </div>
-
     <div class="country-detail" id="country-czech">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇨🇿 Чехія</div>
@@ -183,7 +247,6 @@
       <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
       <a class="job-btn" href="https://t.me/europeservicepl" target="_blank">@europeservicepl<span>Europe Service</span></a>
     </div>
-
     <div class="country-detail" id="country-slovakia">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇸🇰 Словаччина</div>
@@ -191,7 +254,6 @@
       <a class="job-btn" href="https://t.me/ukrajincivsk" target="_blank">@ukrajincivsk<span>Українці в СК</span></a>
       <a class="job-btn" href="https://t.me/slovachyna_pidtrymka" target="_blank">@slovachyna_pidtrymka<span>Підтримка</span></a>
     </div>
-
     <div class="country-detail" id="country-italy">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇮🇹 Італія</div>
@@ -199,7 +261,6 @@
       <a class="job-btn" href="https://t.me/italia_info" target="_blank">@italia_info<span>Italia Info</span></a>
       <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
-
     <div class="country-detail" id="country-hungary">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇭🇺 Угорщина</div>
@@ -207,13 +268,11 @@
       <a class="job-btn" href="https://t.me/dopomoga_hungary" target="_blank">@dopomoga_hungary<span>Допомога</span></a>
       <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
-
     <div class="country-detail" id="country-bulgaria">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🇧🇬 Болгарія</div>
       <a class="job-btn" href="https://t.me/helpukrainiansjooble" target="_blank">@helpukrainiansjooble<span>Jooble</span></a>
     </div>
-
     <div class="country-detail" id="country-general">
       <div class="back-btn" onclick="backToCountries()">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">🌍 Загальні</div>
@@ -225,76 +284,137 @@
   </div>
 
   <script>
+    var MAIN_CURRENCIES = ['USD', 'EUR', 'PLN', 'GBP', 'CHF', 'CZK'];
+    var ratesMap = { UAH: 1 };
+    var ratesTimer = null;
+
     function showPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+      document.querySelectorAll('.nav-btn').forEach(function(b) { b.classList.remove('active'); });
       document.getElementById('page-' + page).classList.add('active');
       document.getElementById('nav-' + page).classList.add('active');
       if (page === 'jobs') backToCountries();
     }
 
+    function switchTab(tab) {
+      document.getElementById('tab-ton').classList.toggle('active', tab === 'ton');
+      document.getElementById('tab-rates').classList.toggle('active', tab === 'rates');
+      document.getElementById('ton-section').style.display = tab === 'ton' ? 'block' : 'none';
+      document.getElementById('rates-section').style.display = tab === 'rates' ? 'block' : 'none';
+      if (tab === 'rates') {
+        loadRates();
+        if (!ratesTimer) {
+          ratesTimer = setInterval(loadRates, 5 * 60 * 1000);
+        }
+      }
+    }
+
+    async function loadRates() {
+      var list = document.getElementById('rates-list');
+      var updated = document.getElementById('rates-updated');
+      try {
+        var res = await fetch('https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json');
+        var data = await res.json();
+        ratesMap = { UAH: 1 };
+        for (var i = 0; i < data.length; i++) {
+          ratesMap[data[i].cc] = data[i].rate;
+        }
+
+        var html = '';
+        for (var j = 0; j < MAIN_CURRENCIES.length; j++) {
+          var cc = MAIN_CURRENCIES[j];
+          var item = null;
+          for (var k = 0; k < data.length; k++) {
+            if (data[k].cc === cc) { item = data[k]; break; }
+          }
+          if (!item) continue;
+          html += '<div class="rate-row">';
+          html += '<div><div class="rate-code">' + item.cc + '</div>';
+          html += '<div class="rate-name">' + item.txt + '</div></div>';
+          html += '<div class="rate-value">' + item.rate.toFixed(2) + ' ₴</div>';
+          html += '</div>';
+        }
+
+        list.innerHTML = html || 'Немає даних';
+        var now = new Date();
+        updated.textContent = 'оновлено ' + now.toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' });
+        convert();
+      } catch (e) {
+        list.innerHTML = 'Помилка завантаження курсу НБУ';
+        updated.textContent = 'помилка';
+      }
+    }
+
+    function convert() {
+      var amount = parseFloat(document.getElementById('conv-amount').value) || 0;
+      var from = document.getElementById('conv-from').value;
+      var to = document.getElementById('conv-to').value;
+      var fromRate = ratesMap[from];
+      var toRate = ratesMap[to];
+      var el = document.getElementById('conv-result');
+      if (!fromRate || !toRate) {
+        el.textContent = '—';
+        return;
+      }
+      var result = (amount * fromRate) / toRate;
+      el.textContent = result.toLocaleString('uk-UA', { maximumFractionDigits: 2 }) + ' ' + to;
+    }
+
     function openCountry(id) {
       document.getElementById('countries-list').style.display = 'none';
-      document.querySelectorAll('.country-detail').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
       document.getElementById('country-' + id).classList.add('active');
     }
 
     function backToCountries() {
       document.getElementById('countries-list').style.display = 'block';
-      document.querySelectorAll('.country-detail').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.country-detail').forEach(function(el) { el.classList.remove('active'); });
     }
 
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+    var tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       manifestUrl: 'https://etimofeev445-rgb.github.io/UAToken/tonconnect-manifest.json',
       buttonRootId: 'ton-connect'
     });
 
-    tonConnectUI.onStatusChange(async (wallet) => {
+    tonConnectUI.onStatusChange(async function(wallet) {
       if (wallet) {
         showInfo(wallet.account.address);
         await loadTonData(wallet.account.address);
-      } else hideInfo();
+      } else {
+        hideInfo();
+      }
     });
 
     async function loadTonData(address) {
       try {
-        const balRes = await fetch(`https://tonapi.io/v2/accounts/${address}`);
-        const balData = await balRes.json();
+        var balRes = await fetch('https://tonapi.io/v2/accounts/' + address);
+        var balData = await balRes.json();
         document.getElementById('balance').textContent = (balData.balance / 1e9).toFixed(4) + ' TON';
-        const txRes = await fetch(`https://tonapi.io/v2/accounts/${address}/events?limit=6`);
-        const txData = await txRes.json();
+        var txRes = await fetch('https://tonapi.io/v2/accounts/' + address + '/events?limit=6');
+        var txData = await txRes.json();
         renderHistory(txData.events || []);
       } catch (e) {
         document.getElementById('balance').textContent = 'Помилка';
       }
     }
 
-    async function connectTron() {
-      if (!window.tronLink) {
-        alert('Встановіть TronLink');
-        window.open('https://www.tronlink.org/', '_blank');
-        return;
-      }
-      try {
-        await window.tronLink.request({ method: 'tron_requestAccounts' });
-        showInfo(window.tronWeb.defaultAddress.base58);
-        document.getElementById('balance').textContent = 'TRX (TronLink)';
-      } catch (e) {
-        alert('Помилка підключення');
-      }
-    }
-
     function renderHistory(events) {
-      const list = document.getElementById('tx-list');
+      var list = document.getElementById('tx-list');
       if (!events.length) {
         list.innerHTML = '<div class="tx">Немає транзакцій</div>';
         return;
       }
-      list.innerHTML = events.map(ev => {
-        const amount = ev.actions?.[0]?.TonTransfer
-          ? (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON' : '—';
-        return `<div class="tx"><span>\( {new Date(ev.timestamp * 1000).toLocaleDateString()}</span><span class="tx-amount"> \){amount}</span></div>`;
-      }).join('');
+      var html = '';
+      for (var i = 0; i < events.length; i++) {
+        var ev = events[i];
+        var amount = '—';
+        if (ev.actions && ev.actions[0] && ev.actions[0].TonTransfer) {
+          amount = (ev.actions[0].TonTransfer.amount / 1e9).toFixed(3) + ' TON';
+        }
+        html += '<div class="tx"><span>' + new Date(ev.timestamp * 1000).toLocaleDateString() + '</span>';
+        html += '<span class="tx-amount">' + amount + '</span></div>';
+      }
+      list.innerHTML = html;
     }
 
     function showInfo(addr) {
@@ -306,20 +426,6 @@
     function hideInfo() {
       document.getElementById('info-box').style.display = 'none';
       document.getElementById('history').style.display = 'none';
-    }
-
-    function switchNetwork(net) {
-      document.getElementById('tab-ton').classList.remove('active');
-      document.getElementById('tab-tron').classList.remove('active');
-      document.getElementById('tab-' + net).classList.add('active');
-      if (net === 'ton') {
-        document.getElementById('ton-section').style.display = 'block';
-        document.getElementById('tron-btn').style.display = 'none';
-      } else {
-        document.getElementById('ton-section').style.display = 'none';
-        document.getElementById('tron-btn').style.display = 'block';
-      }
-      hideInfo();
     }
   </script>
 </body>
