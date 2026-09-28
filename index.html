@@ -116,7 +116,7 @@
     .btn-calendar { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-calc { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
 
-    .rates-box, .converter, .cal-box, .calc-box, .search-box {
+    .rates-box, .converter, .cal-box, .calc-box {
       background: #121218;
       border: 1px solid #2a2a35;
       border-radius: 16px;
@@ -168,7 +168,6 @@
       text-align: center;
     }
 
-    /* КАЛЕНДАРЬ */
     .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .cal-header button {
       background: #1a1a22; border: 1px solid #2a2a35; border-radius: 8px;
@@ -181,7 +180,6 @@
     .cal-day.other { color: #3a3a45; }
     .cal-day.today { background: #00e676; color: #0b0b0f; font-weight: 700; }
 
-    /* КАЛЬКУЛЯТОР */
     .calc-display {
       background: #0f0f14; border-radius: 10px; padding: 14px; text-align: right;
       font-size: 24px; font-weight: 600; min-height: 50px; word-break: break-all;
@@ -196,104 +194,6 @@
     .calc-btn.eq { background: #00e676; color: #0b0b0f; }
     .calc-btn.clear { background: #e17055; color: #fff; }
     .calc-btn.zero { grid-column: span 2; }
-
-    /* ПОИСК */
-    .search-input-wrap {
-      position: relative;
-      margin-bottom: 12px;
-    }
-
-    .search-input-wrap input {
-      width: 100%;
-      padding: 12px 14px 12px 38px;
-      border-radius: 12px;
-      border: 1px solid #2a2a35;
-      background: #0f0f14;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .search-input-wrap .search-icon {
-      position: absolute;
-      left: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #8b8b9e;
-      font-size: 14px;
-    }
-
-    .search-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .search-btn-tg {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      background: #242f3d;
-      color: #64b5f6;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    .search-btn-tg.secondary {
-      background: #1a1a22;
-      color: #8b8b9e;
-      border: 1px solid #2a2a35;
-    }
-
-    .search-btn-tg:active {
-      opacity: 0.8;
-    }
-
-    .search-results {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 14px;
-    }
-
-    .search-item {
-      padding: 12px;
-      background: #0f0f14;
-      border-radius: 10px;
-      border: 1px solid #1f1f28;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .search-item-info h4 {
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .search-item-info p {
-      font-size: 12px;
-      color: #8b8b9e;
-      margin-top: 2px;
-    }
-
-    .search-tag {
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 6px;
-      background: #1f1f28;
-      color: #00e676;
-    }
   </style>
 </head>
 
@@ -307,7 +207,6 @@
 
   <div class="nav" id="main-nav">
     <div class="nav-btn active" data-page="home">🏠 Головна</div>
-    <div class="nav-btn" data-page="search">🔍 Пошук</div>
     <div class="nav-btn" data-page="calendar">📅 Календар</div>
     <div class="nav-btn" data-page="calc">🧮 Калькулятор</div>
   </div>
@@ -349,29 +248,6 @@
         </select>
       </div>
       <div class="conv-result" id="conv-result">—</div>
-    </div>
-  </div>
-
-  <!-- ПОИСК -->
-  <div class="page" id="page-search">
-    <div class="search-box">
-      <div class="search-input-wrap">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="tg-search-input" placeholder="Введіть запит для пошуку..." autocomplete="off">
-      </div>
-
-      <div class="search-actions">
-        <button class="search-btn-tg" id="btn-search-tgstat" type="button">
-          ✈️ Шукати канали та пости (TGStat)
-        </button>
-        <button class="search-btn-tg secondary" id="btn-search-google" type="button">
-          🌐 Шукати посилання t.me (Google)
-        </button>
-      </div>
-
-      <div class="search-results" id="search-results">
-        <!-- Результаты фильтрации приложения -->
-      </div>
     </div>
   </div>
 
@@ -462,84 +338,7 @@
       document.getElementById('btn-go-calendar').addEventListener('click', function() { switchPage('calendar'); });
       document.getElementById('btn-go-calc').addEventListener('click', function() { switchPage('calc'); });
 
-      // 3. ПОИСК
-      var searchInput = document.getElementById('tg-search-input');
-      var btnSearchTgstat = document.getElementById('btn-search-tgstat');
-      var btnSearchGoogle = document.getElementById('btn-search-google');
-      var searchResults = document.getElementById('search-results');
-
-      var appFeatures = [
-        { title: 'Курс валют НБУ', desc: 'USD, EUR, PLN, GBP', page: 'home', tag: 'Валюта' },
-        { title: 'Конвертер валют', desc: 'Швидкий розрахунок суми', page: 'home', tag: 'Фінанси' },
-        { title: 'Календар', desc: 'Перегляд днів та місяців', page: 'calendar', tag: 'Дати' },
-        { title: 'Калькулятор', desc: 'Арифметика та обчислення', page: 'calc', tag: 'Інструмент' }
-      ];
-
-      function renderSearchResults(query) {
-        searchResults.innerHTML = '';
-        var q = query.toLowerCase().trim();
-
-        if (!q) {
-          searchResults.innerHTML = '<div style="text-align:center; padding:12px; color:#8b8b9e; font-size:13px;">Введіть слово для пошуку по додатку або в Telegram</div>';
-          return;
-        }
-
-        var filtered = appFeatures.filter(function(item) {
-          return item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q);
-        });
-
-        if (filtered.length > 0) {
-          filtered.forEach(function(item) {
-            var div = document.createElement('div');
-            div.className = 'search-item';
-            div.innerHTML = '<div class="search-item-info"><h4>' + item.title + '</h4><p>' + item.desc + '</p></div><span class="search-tag">' + item.tag + '</span>';
-            div.addEventListener('click', function() {
-              switchPage(item.page);
-            });
-            searchResults.appendChild(div);
-          });
-        } else {
-          searchResults.innerHTML = '<div style="text-align:center; padding:12px; color:#8b8b9e; font-size:13px;">В додатку нічого не знайдено. Скористайтеся кнопками вище для глобального пошуку в Telegram</div>';
-        }
-      }
-
-      function openExternalSearch(url) {
-        if (tg && tg.openLink) {
-          tg.openLink(url);
-        } else {
-          window.open(url, '_blank');
-        }
-      }
-
-      // Поиск по TGStat (база Telegram каналов)
-      btnSearchTgstat.addEventListener('click', function() {
-        var query = searchInput.value.trim();
-        if (!query) {
-          alert('Введіть слово для пошуку!');
-          return;
-        }
-        var url = 'https://tgstat.com/search?q=' + encodeURIComponent(query);
-        openExternalSearch(url);
-      });
-
-      // Поиск по Google site:t.me
-      btnSearchGoogle.addEventListener('click', function() {
-        var query = searchInput.value.trim();
-        if (!query) {
-          alert('Введіть слово для пошуку!');
-          return;
-        }
-        var url = 'https://www.google.com/search?q=site:t.me+' + encodeURIComponent(query);
-        openExternalSearch(url);
-      });
-
-      searchInput.addEventListener('input', function() {
-        renderSearchResults(this.value);
-      });
-
-      renderSearchResults('');
-
-      // 4. КУРСЫ ВАЛЮТ
+      // 3. КУРСЫ ВАЛЮТ
       var nbuRates = { UAH: 1, USD: 41.5, EUR: 45.2, PLN: 10.5, GBP: 53.0 };
 
       function calculateConversion() {
@@ -580,7 +379,7 @@
       document.getElementById('conv-from').addEventListener('change', calculateConversion);
       document.getElementById('conv-to').addEventListener('change', calculateConversion);
 
-      // 5. КАЛЕНДАРЬ
+      // 4. КАЛЕНДАРЬ
       var calDate = new Date();
       function renderCalendar() {
         var title = document.getElementById('cal-title');
@@ -617,8 +416,35 @@
       document.getElementById('cal-next').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); });
       renderCalendar();
 
-      // 6. КАЛЬКУЛЯТОР
+      // 5. КАЛЬКУЛЯТОР
       var calcDisplay = document.getElementById('calc-display');
       var calcExpr = '';
 
-      document.getElementById('calc-buttons').addEventListener('click', function(e)
+      document.getElementById('calc-buttons').addEventListener('click', function(e) {
+        var btn = e.target.closest('.calc-btn');
+        if (!btn) return;
+        var action = btn.getAttribute('data-action');
+        var val = btn.getAttribute('data-val');
+
+        if (action === 'clear') {
+          calcExpr = '';
+          calcDisplay.textContent = '0';
+        } else if (action === 'equals') {
+          try {
+            var res = Function('return (' + calcExpr.replace(/[^0-9+\-*/.]/g, '') + ')')();
+            calcDisplay.textContent = res;
+            calcExpr = String(res);
+          } catch(err) {
+            calcDisplay.textContent = 'Помилка';
+            calcExpr = '';
+          }
+        } else if (val) {
+          calcExpr += val;
+          calcDisplay.textContent = calcExpr;
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
