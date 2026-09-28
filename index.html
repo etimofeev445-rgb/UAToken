@@ -69,7 +69,7 @@
       border: 1px solid #2a2a35;
       background: #121218;
       color: #8b8b9e;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
@@ -115,9 +115,8 @@
 
     .btn-calendar { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-calc { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
-    .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
 
-    .rates-box, .converter, .cal-box, .calc-box {
+    .rates-box, .converter, .cal-box, .calc-box, .search-box {
       background: #121218;
       border: 1px solid #2a2a35;
       border-radius: 16px;
@@ -169,56 +168,6 @@
       text-align: center;
     }
 
-    /* TELEGRAM РАЗДЕЛ */
-    .countries-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .country-btn {
-      background: #16161d;
-      border: 1px solid #2a2a35;
-      border-radius: 14px;
-      padding: 16px 10px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .country-btn .flag { font-size: 24px; display: block; margin-bottom: 4px; }
-    .country-detail { display: none; }
-    .country-detail.active { display: block; }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      background: #1a1a22;
-      border: 1px solid #2a2a35;
-      border-radius: 10px;
-      padding: 8px 14px;
-      color: #fff;
-      font-size: 13px;
-      margin-bottom: 14px;
-      cursor: pointer;
-    }
-
-    .job-btn {
-      display: block;
-      background: #121218;
-      border: 1px solid #2a2a35;
-      border-radius: 12px;
-      padding: 12px 14px;
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-
-    .job-btn span { display: block; color: #8b8b9e; font-size: 11px; margin-top: 2px; }
-
     /* КАЛЕНДАРЬ */
     .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .cal-header button {
@@ -247,6 +196,92 @@
     .calc-btn.eq { background: #00e676; color: #0b0b0f; }
     .calc-btn.clear { background: #e17055; color: #fff; }
     .calc-btn.zero { grid-column: span 2; }
+
+    /* ПОИСК В СТИЛЕ TELEGRAM */
+    .search-input-wrap {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 12px 14px 12px 38px;
+      border-radius: 12px;
+      border: 1px solid #2a2a35;
+      background: #0f0f14;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-input-wrap .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8b8b9e;
+      font-size: 14px;
+    }
+
+    .search-btn-tg {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      background: #242f3d;
+      color: #64b5f6;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .search-btn-tg:active {
+      background: #1d2733;
+    }
+
+    .search-results {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .search-item {
+      padding: 12px;
+      background: #0f0f14;
+      border-radius: 10px;
+      border: 1px solid #1f1f28;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .search-item-info h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .search-item-info p {
+      font-size: 12px;
+      color: #8b8b9e;
+      margin-top: 2px;
+    }
+
+    .search-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: #1f1f28;
+      color: #00e676;
+    }
   </style>
 </head>
 
@@ -255,12 +290,12 @@
   <div class="header">
     <div class="clock" id="clock">--:--:--</div>
     <h1>UAT App</h1>
-    <p>Курс НБУ · Telegram · Календар</p>
+    <p>Курс НБУ · Календар · Калькулятор</p>
   </div>
 
   <div class="nav" id="main-nav">
     <div class="nav-btn active" data-page="home">🏠 Головна</div>
-    <div class="nav-btn" data-page="jobs">📱 Telegram</div>
+    <div class="nav-btn" data-page="search">🔍 Пошук</div>
     <div class="nav-btn" data-page="calendar">📅 Календар</div>
     <div class="nav-btn" data-page="calc">🧮 Калькулятор</div>
   </div>
@@ -270,7 +305,6 @@
     <div class="buttons">
       <button class="btn btn-calendar" id="btn-go-calendar" type="button">📅 Календар</button>
       <button class="btn btn-calc" id="btn-go-calc" type="button">🧮 Калькулятор</button>
-      <button class="btn btn-ads" id="btn-go-ads" type="button">📋 Оголошення</button>
     </div>
 
     <div class="rates-box">
@@ -306,54 +340,21 @@
     </div>
   </div>
 
-  <!-- TELEGRAM -->
-  <div class="page" id="page-jobs">
-    <div id="countries-list">
-      <div class="countries-grid">
-        <div class="country-btn" data-country="poland"><span class="flag">🇵🇱</span>Польща</div>
-        <div class="country-btn" data-country="germany"><span class="flag">🇩🇪</span>Німеччина</div>
-        <div class="country-btn" data-country="czech"><span class="flag">🇨🇿</span>Чехія</div>
-        <div class="country-btn" data-country="slovakia"><span class="flag">🇸🇰</span>Словаччина</div>
-        <div class="country-btn" data-country="italy"><span class="flag">🇮🇹</span>Італія</div>
-        <div class="country-btn" data-country="general"><span class="flag">🌍</span>Загальні</div>
+  <!-- ПОИСК TELEGRAM -->
+  <div class="page" id="page-search">
+    <div class="search-box">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="tg-search-input" placeholder="Пошук в Telegram або в додатку..." autocomplete="off">
       </div>
-    </div>
 
-    <div class="country-detail" id="country-poland">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇵🇱 Польща</div>
-      <div class="job-btn" data-tg="https://t.me/pracavpolsku">@pracavpolsku <span>Робота в Польщі</span></div>
-      <div class="job-btn" data-tg="https://t.me/workinpolandi">@workinpolandi <span>Work in Poland</span></div>
-    </div>
+      <button class="search-btn-tg" id="btn-search-tg" type="button">
+        ✈️ Шукати все в Telegram
+      </button>
 
-    <div class="country-detail" id="country-germany">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇩🇪 Німеччина</div>
-      <div class="job-btn" data-tg="https://t.me/helpukrainiansjooble">@helpukrainiansjooble <span>Jooble</span></div>
-    </div>
-
-    <div class="country-detail" id="country-czech">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇨🇿 Чехія</div>
-      <div class="job-btn" data-tg="https://t.me/dobra_prace">@dobra_prace <span>Добра праця</span></div>
-    </div>
-
-    <div class="country-detail" id="country-slovakia">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇸🇰 Словаччина</div>
-      <div class="job-btn" data-tg="https://t.me/ukrajincivsk">@ukrajincivsk <span>Українці в СК</span></div>
-    </div>
-
-    <div class="country-detail" id="country-italy">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇮🇹 Італія</div>
-      <div class="job-btn" data-tg="https://t.me/dodomu_italia_ucraina">@dodomu_italia_ucraina <span>Додому Італія</span></div>
-    </div>
-
-    <div class="country-detail" id="country-general">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🌍 Загальні</div>
-      <div class="job-btn" data-tg="https://t.me/outjob">@outjob <span>Робота за кордоном</span></div>
+      <div class="search-results" id="search-results">
+        <!-- Результаты будут генерироваться здесь -->
+      </div>
     </div>
   </div>
 
@@ -408,15 +409,6 @@
         tg.expand();
       }
 
-      // Безопасное открытие Telegram ссылок через SDK
-      function openTgUrl(url) {
-        if (tg && tg.openTelegramLink) {
-          tg.openTelegramLink(url);
-        } else {
-          window.open(url, '_blank');
-        }
-      }
-
       // 1. ЧАСЫ
       function updateClock() {
         var now = new Date();
@@ -452,35 +444,59 @@
 
       document.getElementById('btn-go-calendar').addEventListener('click', function() { switchPage('calendar'); });
       document.getElementById('btn-go-calc').addEventListener('click', function() { switchPage('calc'); });
-      document.getElementById('btn-go-ads').addEventListener('click', function() {
-        openTgUrl('https://t.me/obyavIeni');
-      });
 
-      // 3. ТЕЛЕГРАМ РАЗДЕЛ (Переключение стран)
-      var countriesList = document.getElementById('countries-list');
-      var countryDetails = document.querySelectorAll('.country-detail');
+      // 3. ПОИСК (TELEGRAM & ВНУТРИ ПРИЛОЖЕНИЯ)
+      var searchInput = document.getElementById('tg-search-input');
+      var searchBtnTg = document.getElementById('btn-search-tg');
+      var searchResults = document.getElementById('search-results');
 
-      document.querySelectorAll('.country-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var country = this.getAttribute('data-country');
-          countriesList.style.display = 'none';
-          countryDetails.forEach(function(d) { d.classList.remove('active'); });
-          document.getElementById('country-' + country).classList.add('active');
+      var appFeatures = [
+        { title: 'Курс валют НБУ', desc: 'USD, EUR, PLN, GBP', page: 'home', tag: 'Валюта' },
+        { title: 'Конвертер валют', desc: 'Швидкий розрахунок суми', page: 'home', tag: 'Финансы' },
+        { title: 'Календар', desc: 'Перегляд днів та місяців', page: 'calendar', tag: 'Даты' },
+        { title: 'Калькулятор', desc: 'Арифметика та обчислення', page: 'calc', tag: 'Инструмент' }
+      ];
+
+      function renderSearchResults(query) {
+        searchResults.innerHTML = '';
+        var q = query.toLowerCase().trim();
+
+        var filtered = appFeatures.filter(function(item) {
+          return item.title.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q) || item.tag.toLowerCase().includes(q);
         });
+
+        if (filtered.length > 0) {
+          filtered.forEach(function(item) {
+            var div = document.createElement('div');
+            div.className = 'search-item';
+            div.innerHTML = '<div class="search-item-info"><h4>' + item.title + '</h4><p>' + item.desc + '</p></div><span class="search-tag">' + item.tag + '</span>';
+            div.addEventListener('click', function() {
+              switchPage(item.page);
+            });
+            searchResults.appendChild(div);
+          });
+        } else if (q.length > 0) {
+          searchResults.innerHTML = '<div style="text-align:center; padding:12px; color:#8b8b9e; font-size:13px;">В додатку нічого не знайдено. Натисніть кнопку вище для пошуку в Telegram</div>';
+        }
+      }
+
+      function executeTelegramSearch() {
+        var query = searchInput.value.trim();
+        var searchUrl = query ? 'https://t.me/search?q=' + encodeURIComponent(query) : 'https://t.me/search';
+
+        if (tg && tg.openTelegramLink) {
+          tg.openTelegramLink(searchUrl);
+        } else {
+          window.open(searchUrl, '_blank');
+        }
+      }
+
+      searchInput.addEventListener('input', function() {
+        renderSearchResults(this.value);
       });
 
-      document.querySelectorAll('[data-back]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          countryDetails.forEach(function(d) { d.classList.remove('active'); });
-          countriesList.style.display = 'block';
-        });
-      });
-
-      document.querySelectorAll('[data-tg]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          openTgUrl(this.getAttribute('data-tg'));
-        });
-      });
+      searchBtnTg.addEventListener('click', executeTelegramSearch);
+      renderSearchResults('');
 
       // 4. КУРСЫ ВАЛЮТ
       var nbuRates = { UAH: 1, USD: 41.5, EUR: 45.2, PLN: 10.5, GBP: 53.0 };
@@ -570,4 +586,25 @@
         var action = btn.getAttribute('data-action');
         var val = btn.getAttribute('data-val');
 
-    
+        if (action === 'clear') {
+          calcExpr = '';
+          calcDisplay.textContent = '0';
+        } else if (action === 'equals') {
+          try {
+            var res = Function('return (' + calcExpr.replace(/[^0-9+\-*/.]/g, '') + ')')();
+            calcDisplay.textContent = res;
+            calcExpr = String(res);
+          } catch(err) {
+            calcDisplay.textContent = 'Помилка';
+            calcExpr = '';
+          }
+        } else if (val) {
+          calcExpr += val;
+          calcDisplay.textContent = calcExpr;
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
