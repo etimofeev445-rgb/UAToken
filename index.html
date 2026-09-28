@@ -69,7 +69,7 @@
       border: 1px solid #2a2a35;
       background: #121218;
       color: #8b8b9e;
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
@@ -113,37 +113,8 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-card { background: linear-gradient(135deg, #fdcb6e, #e17055); color: #2d3436; }
     .btn-calendar { background: linear-gradient(135deg, #00b894, #55efc4); color: #003d2e; }
     .btn-calc { background: linear-gradient(135deg, #6c5ce7, #a29bfe); color: white; }
-    .btn-ads { background: linear-gradient(135deg, #0088cc, #00aaff); color: white; }
-
-    .card-menu {
-      display: none;
-      background: #121218;
-      border: 1px solid #2a2a35;
-      border-radius: 14px;
-      padding: 8px;
-      margin-bottom: 10px;
-    }
-
-    .card-menu.active {
-      display: block;
-    }
-
-    .card-option {
-      display: block;
-      padding: 12px 14px;
-      color: #fff;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    .card-option:active {
-      background: #1f1f2a;
-    }
 
     .rates-box, .converter, .cal-box, .calc-box {
       background: #121218;
@@ -197,55 +168,6 @@
       text-align: center;
     }
 
-    .countries-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .country-btn {
-      background: #16161d;
-      border: 1px solid #2a2a35;
-      border-radius: 14px;
-      padding: 16px 10px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      color: #fff;
-    }
-
-    .country-btn .flag { font-size: 24px; display: block; margin-bottom: 4px; }
-    .country-detail { display: none; }
-    .country-detail.active { display: block; }
-
-    .back-btn {
-      display: inline-flex;
-      align-items: center;
-      background: #1a1a22;
-      border: 1px solid #2a2a35;
-      border-radius: 10px;
-      padding: 8px 14px;
-      color: #fff;
-      font-size: 13px;
-      margin-bottom: 14px;
-      cursor: pointer;
-    }
-
-    .job-btn {
-      display: block;
-      background: #121218;
-      border: 1px solid #2a2a35;
-      border-radius: 12px;
-      padding: 12px 14px;
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 8px;
-      cursor: pointer;
-    }
-
-    .job-btn span { display: block; color: #8b8b9e; font-size: 11px; margin-top: 2px; }
-
     .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .cal-header button {
       background: #1a1a22; border: 1px solid #2a2a35; border-radius: 8px;
@@ -280,12 +202,11 @@
   <div class="header">
     <div class="clock" id="clock">--:--:--</div>
     <h1>UAT App</h1>
-    <p>Курс НБУ · Telegram · Календар</p>
+    <p>Курс НБУ · Календар · Калькулятор</p>
   </div>
 
   <div class="nav" id="main-nav">
     <div class="nav-btn active" data-page="home">🏠 Головна</div>
-    <div class="nav-btn" data-page="jobs">📱 Telegram</div>
     <div class="nav-btn" data-page="calendar">📅 Календар</div>
     <div class="nav-btn" data-page="calc">🧮 Калькулятор</div>
   </div>
@@ -293,17 +214,8 @@
   <!-- ГОЛОВНА -->
   <div class="page active" id="page-home">
     <div class="buttons">
-      <button class="btn btn-card" id="btn-card" type="button">💳 Відкрити карту</button>
-
-      <div class="card-menu" id="card-menu">
-        <div class="card-option" data-link="https://get.kolo.xyz/p731910">Kolo</div>
-        <div class="card-option" data-link="https://join.simple.app/goldstar">Simple</div>
-        <div class="card-option" data-link="https://krak.app/@Goldstar">Krak</div>
-      </div>
-
       <button class="btn btn-calendar" id="btn-go-calendar" type="button">📅 Календар</button>
       <button class="btn btn-calc" id="btn-go-calc" type="button">🧮 Калькулятор</button>
-      <button class="btn btn-ads" id="btn-go-ads" type="button">📋 Оголошення</button>
     </div>
 
     <div class="rates-box">
@@ -336,57 +248,6 @@
         </select>
       </div>
       <div class="conv-result" id="conv-result">—</div>
-    </div>
-  </div>
-
-  <!-- TELEGRAM -->
-  <div class="page" id="page-jobs">
-    <div id="countries-list">
-      <div class="countries-grid">
-        <div class="country-btn" data-country="poland"><span class="flag">🇵🇱</span>Польща</div>
-        <div class="country-btn" data-country="germany"><span class="flag">🇩🇪</span>Німеччина</div>
-        <div class="country-btn" data-country="czech"><span class="flag">🇨🇿</span>Чехія</div>
-        <div class="country-btn" data-country="slovakia"><span class="flag">🇸🇰</span>Словаччина</div>
-        <div class="country-btn" data-country="italy"><span class="flag">🇮🇹</span>Італія</div>
-        <div class="country-btn" data-country="general"><span class="flag">🌍</span>Загальні</div>
-      </div>
-    </div>
-
-    <div class="country-detail" id="country-poland">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇵🇱 Польща</div>
-      <div class="job-btn" data-tg="https://t.me/pracavpolsku">@pracavpolsku <span>Робота в Польщі</span></div>
-      <div class="job-btn" data-tg="https://t.me/workinpolandi">@workinpolandi <span>Work in Poland</span></div>
-    </div>
-
-    <div class="country-detail" id="country-germany">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇩🇪 Німеччина</div>
-      <div class="job-btn" data-tg="https://t.me/helpukrainiansjooble">@helpukrainiansjooble <span>Jooble</span></div>
-    </div>
-
-    <div class="country-detail" id="country-czech">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇨🇿 Чехія</div>
-      <div class="job-btn" data-tg="https://t.me/dobra_prace">@dobra_prace <span>Добра праця</span></div>
-    </div>
-
-    <div class="country-detail" id="country-slovakia">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇸🇰 Словаччина</div>
-      <div class="job-btn" data-tg="https://t.me/ukrajincivsk">@ukrajincivsk <span>Українці в СК</span></div>
-    </div>
-
-    <div class="country-detail" id="country-italy">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🇮🇹 Італія</div>
-      <div class="job-btn" data-tg="https://t.me/dodomu_italia_ucraina">@dodomu_italia_ucraina <span>Додому Італія</span></div>
-    </div>
-
-    <div class="country-detail" id="country-general">
-      <div class="back-btn" data-back="true">← Назад</div>
-      <div style="font-size:16px;margin-bottom:12px;font-weight:700">🌍 Загальні</div>
-      <div class="job-btn" data-tg="https://t.me/outjob">@outjob <span>Робота за кордоном</span></div>
     </div>
   </div>
 
@@ -441,24 +302,6 @@
         tg.expand();
       }
 
-      // Безопасное открытие внешних ссылок
-      function openUrl(url) {
-        if (tg && tg.openLink) {
-          tg.openLink(url);
-        } else {
-          window.open(url, '_blank');
-        }
-      }
-
-      // Безопасное открытие Telegram ссылок
-      function openTgUrl(url) {
-        if (tg && tg.openTelegramLink) {
-          tg.openTelegramLink(url);
-        } else {
-          window.open(url, '_blank');
-        }
-      }
-
       // 1. ЧАСЫ
       function updateClock() {
         var now = new Date();
@@ -494,49 +337,8 @@
 
       document.getElementById('btn-go-calendar').addEventListener('click', function() { switchPage('calendar'); });
       document.getElementById('btn-go-calc').addEventListener('click', function() { switchPage('calc'); });
-      
-      document.getElementById('btn-go-ads').addEventListener('click', function() {
-        openTgUrl('https://t.me/obyavIeni');
-      });
 
-      // 3. МЕНЮ КАРТ И ССЫЛКИ
-      var btnCard = document.getElementById('btn-card');
-      var cardMenu = document.getElementById('card-menu');
-      btnCard.addEventListener('click', function() { cardMenu.classList.toggle('active'); });
-
-      document.querySelectorAll('.card-option').forEach(function(opt) {
-        opt.addEventListener('click', function() {
-          openUrl(this.getAttribute('data-link'));
-        });
-      });
-
-      // 4. ТЕЛЕГРАМ / КАНАЛЫ
-      var countriesList = document.getElementById('countries-list');
-      var countryDetails = document.querySelectorAll('.country-detail');
-
-      document.querySelectorAll('.country-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var country = this.getAttribute('data-country');
-          countriesList.style.display = 'none';
-          countryDetails.forEach(function(d) { d.classList.remove('active'); });
-          document.getElementById('country-' + country).classList.add('active');
-        });
-      });
-
-      document.querySelectorAll('[data-back]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          countryDetails.forEach(function(d) { d.classList.remove('active'); });
-          countriesList.style.display = 'block';
-        });
-      });
-
-      document.querySelectorAll('[data-tg]').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          openTgUrl(this.getAttribute('data-tg'));
-        });
-      });
-
-      // 5. КУРСЫ ВАЛЮТ
+      // 3. КУРСЫ ВАЛЮТ
       var nbuRates = { UAH: 1, USD: 41.5, EUR: 45.2, PLN: 10.5, GBP: 53.0 };
 
       function calculateConversion() {
@@ -577,7 +379,7 @@
       document.getElementById('conv-from').addEventListener('change', calculateConversion);
       document.getElementById('conv-to').addEventListener('change', calculateConversion);
 
-      // 6. КАЛЕНДАРЬ
+      // 4. КАЛЕНДАРЬ
       var calDate = new Date();
       function renderCalendar() {
         var title = document.getElementById('cal-title');
@@ -586,4 +388,63 @@
         var month = calDate.getMonth();
         var monthNames = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
 
-        title.text
+        title.textContent = monthNames[month] + ' ' + year;
+        days.innerHTML = '';
+
+        var firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
+        var lastDay = new Date(year, month + 1, 0).getDate();
+        var prevLast = new Date(year, month, 0).getDate();
+        var now = new Date();
+
+        for (var x = firstDay; x > 0; x--) {
+          var d = document.createElement('div');
+          d.className = 'cal-day other';
+          d.textContent = prevLast - x + 1;
+          days.appendChild(d);
+        }
+
+        for (var i = 1; i <= lastDay; i++) {
+          var d = document.createElement('div');
+          d.className = 'cal-day';
+          if (i === now.getDate() && month === now.getMonth() && year === now.getFullYear()) d.classList.add('today');
+          d.textContent = i;
+          days.appendChild(d);
+        }
+      }
+
+      document.getElementById('cal-prev').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() - 1); renderCalendar(); });
+      document.getElementById('cal-next').addEventListener('click', function() { calDate.setMonth(calDate.getMonth() + 1); renderCalendar(); });
+      renderCalendar();
+
+      // 5. КАЛЬКУЛЯТОР
+      var calcDisplay = document.getElementById('calc-display');
+      var calcExpr = '';
+
+      document.getElementById('calc-buttons').addEventListener('click', function(e) {
+        var btn = e.target.closest('.calc-btn');
+        if (!btn) return;
+        var action = btn.getAttribute('data-action');
+        var val = btn.getAttribute('data-val');
+
+        if (action === 'clear') {
+          calcExpr = '';
+          calcDisplay.textContent = '0';
+        } else if (action === 'equals') {
+          try {
+            var res = Function('return (' + calcExpr.replace(/[^0-9+\-*/.]/g, '') + ')')();
+            calcDisplay.textContent = res;
+            calcExpr = String(res);
+          } catch(err) {
+            calcDisplay.textContent = 'Помилка';
+            calcExpr = '';
+          }
+        } else if (val) {
+          calcExpr += val;
+          calcDisplay.textContent = calcExpr;
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
