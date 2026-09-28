@@ -72,6 +72,7 @@
       cursor: pointer;
       text-align: center;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     .nav-btn.active {
@@ -110,6 +111,7 @@
       text-decoration: none;
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     .btn-card {
@@ -254,6 +256,7 @@
       font-size: 15px;
       font-weight: 600;
       color: #fff;
+      user-select: none;
     }
 
     .country-btn .flag {
@@ -282,6 +285,7 @@
       font-size: 14px;
       margin-bottom: 18px;
       cursor: pointer;
+      user-select: none;
     }
 
     .job-btn {
@@ -395,6 +399,8 @@
       cursor: pointer;
       background: #1a1a22;
       color: #fff;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .calc-btn.op {
@@ -528,7 +534,7 @@
 
         <select id="conv-to">
           <option value="USD">USD</option>
-          <option value="UAH">UAH</option>
+          <option value="UAH" selected>UAH</option>
           <option value="EUR">EUR</option>
           <option value="PLN">PLN</option>
           <option value="GBP">GBP</option>
@@ -598,7 +604,7 @@
     </div>
 
     <div class="country-detail" id="country-poland">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇵🇱 Польща
       </div>
@@ -620,7 +626,7 @@
     </div>
 
     <div class="country-detail" id="country-germany">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇩🇪 Німеччина
@@ -643,7 +649,7 @@
     </div>
 
     <div class="country-detail" id="country-czech">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇨🇿 Чехія
@@ -666,7 +672,7 @@
     </div>
 
     <div class="country-detail" id="country-slovakia">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇸🇰 Словаччина
@@ -689,7 +695,7 @@
     </div>
 
     <div class="country-detail" id="country-italy">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇮🇹 Італія
@@ -712,7 +718,7 @@
     </div>
 
     <div class="country-detail" id="country-hungary">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇭🇺 Угорщина
@@ -735,7 +741,7 @@
     </div>
 
     <div class="country-detail" id="country-bulgaria">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🇧🇬 Болгарія
@@ -748,7 +754,7 @@
     </div>
 
     <div class="country-detail" id="country-general">
-      <div class="back-btn" data-back>← Назад</div>
+      <div class="back-btn" data-back="true">← Назад</div>
 
       <div style="font-size:18px;margin-bottom:14px;font-weight:700">
         🌍 Загальні
@@ -848,20 +854,4 @@
         <button class="calc-btn" data-val="2">2</button>
         <button class="calc-btn" data-val="3">3</button>
 
-        <button class="calc-btn zero" data-val="0">0</button>
-
-        <button class="calc-btn" data-val=".">.</button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <script>
-    (function () {
-      'use strict';
-
-      // 1. ЧАСЫ В ШАПКЕ
-      function updateClock() {
-        
+        <button class="cal
